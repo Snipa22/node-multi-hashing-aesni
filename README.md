@@ -78,3 +78,4 @@ Credits
 * [scrypt](http://en.wikipedia.org/wiki/Scrypt) - Colin Percival
 * [bcrypt](http://en.wikipedia.org/wiki/Bcrypt) - Niels Provos and David Mazières
 * [X11](http://www.darkcoin.io/), [Hefty1](http://heavycoin.github.io/about.html), [Quark](http://www.qrk.cc/) creators (they just mixed together a bunch of the above algos)
+* [Wolf0](https://github.com/Wolf9466) - Rebuilding the Cryptonote functions to use AES-NI for speed purposes
