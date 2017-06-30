@@ -3,7 +3,7 @@
 #include <v8.h>
 #include <stdint.h>
 #include <nan.h>
-#include "multihashing_async.h"
+#include "multihashing.h"
 
 extern "C" {
     #include "cryptonight.h"
@@ -64,10 +64,10 @@ class CNAsyncWorker : public Nan::AsyncWorker{
       }
 
     void HandleOKCallback () {
-        HandleScope scope;
+        Nan::HandleScope scope;
 
-        Local<Value> argv[] = {
-            Null()
+        v8::Local<v8::Value> argv[] = {
+            Nan::Null()
           , v8::Local<v8::Value>(Nan::CopyBuffer(output, 32).ToLocalChecked())
         };
 
@@ -76,9 +76,9 @@ class CNAsyncWorker : public Nan::AsyncWorker{
 
     private:
         int input_len;
-        char * input[input_len];
+        char * input;
         char output[32];
-}
+};
 
 NAN_METHOD(CNAsync) {
 
@@ -96,6 +96,7 @@ NAN_METHOD(CNAsync) {
 
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
+    Nan::Set(target, Nan::New("CNAsync").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(CNAsync)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)
