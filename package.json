@@ -1,32 +1,21 @@
 {
     "name": "multi-hashing",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "main": "multihashing",
     "author": {
-        "name": "Matthew Little",
-        "email": "zone117x@gmail.com"
+        "name": "Multiple",
+        "email": "Check The Git Repo"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/zone117x/node-multi-hashing.git"
+        "url": "https://github.com/snipa22/node-multi-hashing-aesni.git"
     },
     "dependencies" : {
         "bindings" : "*",
         "nan": "^2.0.0"
     },
     "keywords": [
-        "scrypt",
-        "scryptjane",
-        "script-n",
-        "x11",
-        "quark",
-        "keccak_hash",
-        "skein",
-        "bcrypt",
-        "keccak",
-        "blake",
-        "shavite",
-        "fugue",
-        "sha1"
+        "cryptonote",
+        "cryptonote-light"
     ]
 }
