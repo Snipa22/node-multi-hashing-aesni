@@ -55,7 +55,7 @@ NAN_METHOD(cryptonight) {
 
 class CNAsyncWorker : public Nan::AsyncWorker{
     public:
-        CNAsyncWorker(Nan::Callback *callback, char * input, int input_len)
+        CNAsyncWorker(Nan::Callback *callback, char * input, uint32_t input_len)
             : Nan::AsyncWorker(callback), input(input), input_len(input_len){}
         ~CNAsyncWorker() {}
 
@@ -75,7 +75,7 @@ class CNAsyncWorker : public Nan::AsyncWorker{
       }
 
     private:
-        int input_len;
+        uint32_t input_len;
         char * input;
         char output[32];
 };
