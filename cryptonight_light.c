@@ -33,7 +33,7 @@ static void do_blake_hash(const void* input, size_t len, char* output) {
     blake256_hash((uint8_t*)output, input, len);
 }
 
-void do_groestl_hash(const void* input, size_t len, char* output) {
+static void do_groestl_hash(const void* input, size_t len, char* output) {
     groestl(input, len * 8, (uint8_t*)output);
 }
 
@@ -225,7 +225,7 @@ static void CNKeccakF1600(uint64_t *st)
 	}
 }
 
-void CNKeccak(uint64_t *output, uint64_t *input)
+static void CNKeccak(uint64_t *output, uint64_t *input)
 {
 	uint64_t st[25];
 	
