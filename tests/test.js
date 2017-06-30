@@ -19,10 +19,10 @@ let hashes = {
 for (let hashType in hashes){
     if (hashes.hasOwnProperty(hashType)){
         let testsFailed = 0, testsPassed = 0;
-        lineReader.createInterface({
+        let lr = lineReader.createInterface({
             input: fs.createReadStream(hashes[hashType].file)
         });
-        lineReader.on('line', function (line) {
+        lr.on('line', function (line) {
             if (hashes[hashType].format === 'cn'){
                 let line_data = line.split(' ');
                 if (line_data[0] !== hashes[hashType].function(Buffer.from(line_data[1])).toString('hex')){
@@ -32,7 +32,7 @@ for (let hashType in hashes){
                 }
             }
         });
-        lineReader.on('close', function(){
+        lr.on('close', function(){
             if (testsFailed > 0){
                 console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: ' + hashType);
             } else {
