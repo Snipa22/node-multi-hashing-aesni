@@ -6,6 +6,7 @@
 
 extern "C" {
     #include "cryptonight.h"
+    #include "cryptonight_light.h"
 }
 
 #define THROW_ERROR_EXCEPTION(x) Nan::ThrowError(x)
@@ -51,8 +52,44 @@ NAN_METHOD(cryptonight) {
     );
 }
 
+NAN_METHOD(cryptonight_light) {
+
+    bool fast = false;
+
+    if (info.Length() < 1)
+        return THROW_ERROR_EXCEPTION("You must provide one argument.");
+
+    if (info.Length() >= 2) {
+        if(!info[1]->IsBoolean())
+            return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean");
+        fast = info[1]->ToBoolean()->BooleanValue();
+    }
+
+    Local<Object> target = info[0]->ToObject();
+
+    if(!Buffer::HasInstance(target))
+        return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
+
+    char * input = Buffer::Data(target);
+    char output[32];
+
+    uint32_t input_len = Buffer::Length(target);
+
+    if(fast)
+        cryptonight_light_fast_hash(input, output, input_len);
+    else
+        cryptonight_light_hash(input, output, input_len);
+
+    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
+    info.GetReturnValue().Set(
+        returnValue
+    );
+}
+
+
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
+    Nan::Set(target, Nan::New("cryptonight_light").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)
