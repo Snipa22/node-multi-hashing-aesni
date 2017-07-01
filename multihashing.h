@@ -1,0 +1,9 @@
+#ifndef MULTIHASHING_ASYNC_H_
+#define MULTIHASHING_ASYNC_H_
+
+#include <nan.h>
+
+NAN_METHOD(CNAsync);
+NAN_METHOD(CNLAsync);
+
+#endif  // MULTIHASHING_ASYNC_H_
