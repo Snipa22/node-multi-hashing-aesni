@@ -46,3 +46,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 build/*
+
+node_modules/*
+build/*
+cmake-build-debug/*
+.idea/*

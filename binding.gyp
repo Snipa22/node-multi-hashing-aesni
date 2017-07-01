@@ -5,6 +5,7 @@
             "sources": [
                 "multihashing.cc",
                 "cryptonight.c",
+                "cryptonight_light.c",
                 "sha3/sph_keccak.c",
                 "crypto/oaes_lib.c",
                 "crypto/c_keccak.c",
