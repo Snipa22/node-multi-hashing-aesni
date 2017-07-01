@@ -16,6 +16,8 @@ let hashes = {
     }
 };
 
+console.log(multiHashing.cryptonight(Buffer.from('This is a test')).toString('hex'))
+/*
 for (let hashType in hashes){
     if (hashes.hasOwnProperty(hashType)){
         let testsFailed = 0, testsPassed = 0;
@@ -25,7 +27,10 @@ for (let hashType in hashes){
         lr.on('line', function (line) {
             if (hashes[hashType].fileFormat === 'cn'){
                 let line_data = line.split(' ');
-                if (line_data[0] !== hashes[hashType].function(Buffer.from(line_data[1])).toString('hex')){
+                let hashed_data = hashes[hashType].function(Buffer.from(line_data[1])).toString('hex');
+                if (line_data[0] !== hashed_data){
+                    console.log('Expected: ' + line_data[0]);
+                    console.log('Received: ' + hashed_data);
                     testsFailed += 1;
                 } else {
                     testsPassed += 1;
@@ -41,3 +46,4 @@ for (let hashType in hashes){
         });
     }
 }
+*/
