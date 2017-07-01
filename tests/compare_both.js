@@ -21,9 +21,9 @@ lr.on('line', function (line) {
         }
         if (line_count === (testsFailed + testsPassed)){
             if (testsFailed > 0){
-                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: CN-Sync');
+                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: CN-Async');
             } else {
-                console.log(testsPassed + ' tests passed on: CN-Sync');
+                console.log(testsPassed + ' tests passed on: CN-Async');
             }
         }
     });
