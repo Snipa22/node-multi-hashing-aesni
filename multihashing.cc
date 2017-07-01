@@ -95,6 +95,47 @@ NAN_METHOD(CNAsync) {
     Nan::AsyncQueueWorker(new CNAsyncWorker(callback, input, input_len));
 }
 
+class CNLAsyncWorker : public Nan::AsyncWorker{
+    public:
+        CNLAsyncWorker(Nan::Callback *callback, char * input, uint32_t input_len)
+            : Nan::AsyncWorker(callback), input(input), input_len(input_len){}
+        ~CNLAsyncWorker() {}
+
+    void Execute () {
+        cryptonight_light_hash(input, output, input_len);
+      }
+
+    void HandleOKCallback () {
+        Nan::HandleScope scope;
+
+        v8::Local<v8::Value> argv[] = {
+            Nan::Null()
+          , v8::Local<v8::Value>(Nan::CopyBuffer(output, 32).ToLocalChecked())
+        };
+
+        callback->Call(2, argv);
+      }
+
+    private:
+        uint32_t input_len;
+        char * input;
+        char output[32];
+};
+
+NAN_METHOD(CNLAsync) {
+
+    if (info.Length() != 2)
+        return THROW_ERROR_EXCEPTION("You must provide two arguments.");
+
+    Local<Object> target = info[0]->ToObject();
+    Callback *callback = new Nan::Callback(info[1].As<v8::Function>());
+
+    char * input = Buffer::Data(target);
+    uint32_t input_len = Buffer::Length(target);
+
+    Nan::AsyncQueueWorker(new CNLAsyncWorker(callback, input, input_len));
+}
+
 NAN_METHOD(cryptonight_light) {
 
     bool fast = false;
@@ -134,6 +175,7 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
     Nan::Set(target, Nan::New("CNAsync").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(CNAsync)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_light").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light)).ToLocalChecked());
+    Nan::Set(target, Nan::New("CNLAsync").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(CNAsync)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)

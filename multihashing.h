@@ -4,5 +4,6 @@
 #include <nan.h>
 
 NAN_METHOD(CNAsync);
+NAN_METHOD(CNLAsync);
 
 #endif  // MULTIHASHING_ASYNC_H_
