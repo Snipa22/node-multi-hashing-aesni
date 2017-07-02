@@ -3,7 +3,6 @@
 #include <v8.h>
 #include <stdint.h>
 #include <nan.h>
-#include "multihashing.h"
 
 extern "C" {
     #include "cryptonight.h"
@@ -64,7 +63,7 @@ class CNAsyncWorker : public Nan::AsyncWorker{
         ~CNAsyncWorker() {}
 
     void Execute () {
-        cryptonight_hash(input, output, input_len);
+        cryptonight_hash(input, output, input_len, ctx);
       }
 
     void HandleOKCallback () {
@@ -105,7 +104,7 @@ class CNLAsyncWorker : public Nan::AsyncWorker{
         ~CNLAsyncWorker() {}
 
     void Execute () {
-        cryptonight_light_hash(input, output, input_len, ctx);
+        cryptonight_light_hash(input, output, input_len);
       }
 
     void HandleOKCallback () {

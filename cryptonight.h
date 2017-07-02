@@ -13,9 +13,6 @@ extern "C" {
 #include "crypto/oaes_lib.h"
 #include <stdint.h>
 
-void cryptonight_hash(const char* input, char* output, uint32_t len);
-void cryptonight_fast_hash(const char* input, char* output, uint32_t len);
-
 #pragma pack(push, 1)
 union cn_slow_hash_state {
     union hash_state hs;
@@ -35,6 +32,9 @@ struct cryptonight_ctx {
     uint8_t c[AES_BLOCK_SIZE] __attribute__((aligned(16)));
     oaes_ctx* aes_ctx;
 };
+
+void cryptonight_hash(const char* input, char* output, uint32_t len, cryptonight_ctx* ctx);
+void cryptonight_fast_hash(const char* input, char* output, uint32_t len);
 
 #ifdef __cplusplus
 }
