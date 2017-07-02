@@ -16,6 +16,9 @@ void callback(char* data, void* hint) {
   free(data);
 }
 
+
+struct cryptonight_ctx *ctx = alloca(sizeof(struct cryptonight_ctx));
+
 using namespace node;
 using namespace v8;
 using namespace Nan;
@@ -102,7 +105,7 @@ class CNLAsyncWorker : public Nan::AsyncWorker{
         ~CNLAsyncWorker() {}
 
     void Execute () {
-        cryptonight_light_hash(input, output, input_len);
+        cryptonight_light_hash(input, output, input_len, ctx);
       }
 
     void HandleOKCallback () {
@@ -179,3 +182,4 @@ NAN_MODULE_INIT(init) {
 }
 
 NODE_MODULE(multihashing, init)
+

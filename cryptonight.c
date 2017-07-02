@@ -2,7 +2,6 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "crypto/oaes_lib.h"
 #include "crypto/c_keccak.h"
 #include "crypto/c_groestl.h"
 #include "crypto/c_blake256.h"
@@ -18,16 +17,6 @@
 #define AES_KEY_SIZE    32 /*16*/
 #define INIT_SIZE_BLK   8
 #define INIT_SIZE_BYTE (INIT_SIZE_BLK * AES_BLOCK_SIZE)
-
-#pragma pack(push, 1)
-union cn_slow_hash_state {
-    union hash_state hs;
-    struct {
-        uint8_t k[64];
-        uint8_t init[INIT_SIZE_BYTE];
-    };
-};
-#pragma pack(pop)
 
 static void do_blake_hash(const void* input, size_t len, char* output) {
     blake256_hash((uint8_t*)output, input, len);
@@ -316,18 +305,8 @@ static inline void xor_blocks_dst(const uint8_t* a, const uint8_t* b, uint8_t* d
     ((uint64_t*) dst)[1] = ((uint64_t*) a)[1] ^ ((uint64_t*) b)[1];
 }
 
-struct cryptonight_ctx {
-    uint8_t long_state[MEMORY] __attribute((aligned(16)));
-    union cn_slow_hash_state state;
-    uint8_t text[INIT_SIZE_BYTE] __attribute((aligned(16)));
-    uint64_t a[AES_BLOCK_SIZE >> 3] __attribute__((aligned(16)));
-    uint64_t b[AES_BLOCK_SIZE >> 3] __attribute__((aligned(16)));
-    uint8_t c[AES_BLOCK_SIZE] __attribute__((aligned(16)));
-    oaes_ctx* aes_ctx;
-};
+void cryptonight_hash(const char* input, char* output, uint32_t len, struct* cryptonight_ctx ctx) {
 
-void cryptonight_hash(const char* input, char* output, uint32_t len) {
-    struct cryptonight_ctx *ctx = alloca(sizeof(struct cryptonight_ctx));
     uint8_t ExpandedKey[256];
     
     CNKeccak(&ctx->state.hs, input);
