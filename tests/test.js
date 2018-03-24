@@ -20,7 +20,9 @@ for (let hashType in hashes){
         lr.on('line', function (line) {
             if (hashes[hashType].fileFormat === 'cn'){
                 let line_data = line.split(' ');
-                if (line_data[0] !== hashes[hashType].function(Buffer.from(line_data[1])).toString('hex')){
+                let result = hashes[hashType].function(Buffer.from(line_data[1])).toString('hex');
+                if (line_data[0] !== result){
+                    console.error(result);
                     testsFailed += 1;
                 } else {
                     testsPassed += 1;
