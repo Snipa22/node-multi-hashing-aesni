@@ -28,7 +28,7 @@ NAN_METHOD(cryptonight) {
 
     if (info.Length() >= 2) {
         if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
-        variant = info[1]->ToBoolean()->BooleanValue();
+        variant = info[1]->ToNumber()->NumberValue();
     }
 
     char output[32];
@@ -73,16 +73,20 @@ NAN_METHOD(cryptonight_async) {
     if (info.Length() < 2) return THROW_ERROR_EXCEPTION("You must provide at least two arguments.");
 
     Callback *callback = new Nan::Callback(info[0].As<v8::Function>());
-    Local<Object> target = info[1]->ToObject();
-    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 2 should be a buffer object.");
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
 
     int variant = 0;
 
+    int callback_arg_num;
     if (info.Length() >= 3) {
-        if(!info[2]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 3 should be a number");
-        variant = info[2]->ToBoolean()->BooleanValue();
+        if(!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        variant = info[1]->ToNumber()->NumberValue();
+        callback_arg_num = 2;
+    } else {
+        callback_arg_num = 1;
     }
 
+    Local<Object> target = info[callback_arg_num]->ToObject();
     Nan::AsyncQueueWorker(new CNAsyncWorker(callback, Buffer::Data(target), Buffer::Length(target), variant));
 }
 
