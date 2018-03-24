@@ -16,7 +16,8 @@
                 "monero/keccak.c",
                 "monero/oaes_lib.c",
                 "monero/skein.c",
-                "monero/slow-hash.c"
+                "monero/slow-hash.c",
+                "xmrig/crypto/c_skein.c",
             ],
             "include_dirs": [
                 "<!(node -e \"require('nan')\")"
