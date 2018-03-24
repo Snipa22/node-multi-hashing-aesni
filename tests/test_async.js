@@ -11,7 +11,9 @@ lr.on('line', function (line) {
      let line_data = line.split(/ (.+)/);
      line_count += 1;
      multiHashing.cryptonight_async(function(err, result){
-         if (line_data[0] !== result.toString('hex')){
+         result = result.toString('hex');
+         if (line_data[0] !== result){
+             console.error(line_data[1] + ": " + result);
              testsFailed += 1;
          } else {
              testsPassed += 1;

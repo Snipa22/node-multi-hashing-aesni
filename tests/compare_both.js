@@ -11,12 +11,13 @@ lr.on('line', function (line) {
     let line_data = line.split(/ (.+)/);
     line_count += 1;
     multiHashing.cryptonight_async(function(err, result){
-        if (line_data[0] !== result.toString('hex')){
+        result = result.toString('hex');
+        if (line_data[0] !== result){
             testsFailed += 1;
         } else {
             testsPassed += 1;
         }
-        let result2 = multiHashing.cryptonight(Buffer.from(line_data[1]));
+        let result2 = multiHashing.cryptonight(Buffer.from(line_data[1]).toString('hex'));
         if (result !== result2){
             console.log('line_data[1]: the two functions do not agree: ' + result + ' and ' + result2);
         }
