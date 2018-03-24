@@ -60,7 +60,7 @@ class CNAsyncWorker : public Nan::AsyncWorker {
 
     private:
 
-        struct cryptonight_ctx* const m_ctx;
+        //struct cryptonight_ctx* const m_ctx;
         const char* const m_input;
         const uint32_t m_input_len;
         const int m_variant;
@@ -69,9 +69,9 @@ class CNAsyncWorker : public Nan::AsyncWorker {
     public:
 
         CNAsyncWorker(Nan::Callback* const callback, const char* const input, const uint32_t input_len, const int variant)
-            : Nan::AsyncWorker(callback), m_ctx(static_cast<cryptonight_ctx *>(_mm_malloc(sizeof(cryptonight_ctx), 16))),
+            : Nan::AsyncWorker(callback)//, m_ctx(static_cast<cryptonight_ctx *>(_mm_malloc(sizeof(cryptonight_ctx), 16))),
               m_input(input), m_input_len(input_len), m_variant(variant) {
-            m_ctx->memory = static_cast<uint8_t *>(_mm_malloc(MONERO_MEMORY * 2, 16));
+            //m_ctx->memory = static_cast<uint8_t *>(_mm_malloc(MONERO_MEMORY * 2, 16));
         }
 
         ~CNAsyncWorker() {}
