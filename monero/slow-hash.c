@@ -580,7 +580,6 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int 
     uint64_t *p = NULL;
     oaes_ctx *aes_ctx = NULL;
     int useAes = !force_software_aes() && check_aes_hw();
-    if (!useAes) return;
 
     static void (*const extra_hashes[4])(const void *, size_t, char *) =
     {
