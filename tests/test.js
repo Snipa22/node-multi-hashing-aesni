@@ -22,7 +22,7 @@ for (let hashType in hashes){
                 let line_data = line.split(' ');
                 let result = hashes[hashType].function(Buffer.from(line_data[1])).toString('hex');
                 if (line_data[0] !== result){
-                    console.error(result);
+                    console.error(line_data[1] + ": " + result);
                     testsFailed += 1;
                 } else {
                     testsPassed += 1;
