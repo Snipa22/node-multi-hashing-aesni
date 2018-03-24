@@ -27,8 +27,8 @@ NAN_METHOD(cryptonight) {
     int variant = 0;
 
     if (info.Length() >= 2) {
-        if (!info[1]->IsNumber() || info[1]->IsNaN()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
-        variant = static_cast<int>(Nan::To<int>(info[1]));
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        variant = Nan::To<int>(info[1]).FromMaybe(0);
     }
 
     char output[32];
@@ -79,8 +79,8 @@ NAN_METHOD(cryptonight_async) {
 
     int callback_arg_num;
     if (info.Length() >= 3) {
-        if (!info[1]->IsNumber() || info[1]->IsNaN()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
-        variant = static_cast<int>(Nan::To<int>(info[1]));
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        variant = Nan::To<int>(info[1]).FromMaybe(0);
         callback_arg_num = 2;
     } else {
         callback_arg_num = 1;
