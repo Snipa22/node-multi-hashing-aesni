@@ -17,7 +17,7 @@ lr.on('line', function (line) {
         } else {
             testsPassed += 1;
         }
-        let result2 = multiHashing.cryptonight(Buffer.from(line_data[1]).toString('hex'));
+        let result2 = multiHashing.cryptonight(Buffer.from(line_data[1])).toString('hex');
         if (result !== result2){
             console.log('line_data[1]: the two functions do not agree: ' + result + ' and ' + result2);
         }
