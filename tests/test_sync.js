@@ -19,8 +19,8 @@ lr.on('line', function (line) {
 });
 lr.on('close', function(){
     if (testsFailed > 0){
-        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: CN-Sync');
+        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight');
     } else {
-        console.log(testsPassed + ' tests passed on: CN-Sync');
+        console.log(testsPassed + ' tests passed on: cryptonight');
     }
 });

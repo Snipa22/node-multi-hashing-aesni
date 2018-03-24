@@ -16,14 +16,15 @@ lr.on('line', function (line) {
         } else {
             testsPassed += 1;
         }
-        if (result !== multiHashing.cryptonight(Buffer.from(line_data[1]))){
-            console.log('The two functions do not agree');
+        let result2 = multiHashing.cryptonight(Buffer.from(line_data[1]));
+        if (result !== result2){
+            console.log('line_data[1]: the two functions do not agree: ' + result + ' and ' + result2);
         }
         if (line_count === (testsFailed + testsPassed)){
             if (testsFailed > 0){
-                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight_async');
+                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' comparision tests failed');
             } else {
-                console.log(testsPassed + ' tests passed on: cryptonight_async');
+                console.log(testsPassed + ' comparision tests passed');
             }
         }
     }, Buffer.from(line_data[1]));
