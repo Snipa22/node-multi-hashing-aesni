@@ -32,7 +32,7 @@ NAN_METHOD(cryptonight) {
     }
 
     char output[32];
-    slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant, false);
+    slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant);
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
     info.GetReturnValue().Set(returnValue);
@@ -42,9 +42,9 @@ class CNAsyncWorker : public Nan::AsyncWorker {
 
     private:
 
-        uint32_t m_input_len;
-        char* m_input;
-        int m_variant;
+        const char* const m_input;
+        const uint32_t m_input_len;
+        const int m_variant;
         char m_output[32];
 
     public:
