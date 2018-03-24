@@ -8,12 +8,14 @@ let lr = lineReader.createInterface({
      input: fs.createReadStream('cryptonight.txt')
 });
 lr.on('line', function (line) {
-     let line_data = line.split(' ');
-     if (line_data[0] !== multiHashing.cryptonight(Buffer.from(line_data[1])).toString('hex')){
-            testsFailed += 1;
-        } else {
-            testsPassed += 1;
-        }
+     let line_data = line.split(/ (.+)/);
+     let result = multiHashing.cryptonight(Buffer.from(line_data[1])).toString('hex');
+     if (line_data[0] !== result){
+         console.error(line_data[1] + ": " + result);
+         testsFailed += 1;
+     } else {
+         testsPassed += 1;
+     }
 });
 lr.on('close', function(){
     if (testsFailed > 0){
