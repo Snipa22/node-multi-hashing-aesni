@@ -16,17 +16,17 @@
                 "monero/keccak.c",
                 "monero/oaes_lib.c",
                 "monero/skein.c",
-                "monero/slow-hash.c",
+                "monero/slow-hash.c"
             ],
             "include_dirs": [
-                "<!(node -e \"require('nan')\")",
+                "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
                 "-std=gnu11 -march=native -fPIC -m64"
             ],
             "cflags_cc": [
                 "-std=gnu++11 -fPIC -m64"
-            ],
+            ]
         }
     ]
 }
