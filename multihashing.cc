@@ -3,17 +3,15 @@
 #include <v8.h>
 #include <stdint.h>
 #include <nan.h>
-#include "multihashing.h"
 
 extern "C" {
-    #include "cryptonight.h"
-    #include "cryptonight_light.h"
+    #include "slow_hash.h"
 }
 
 #define THROW_ERROR_EXCEPTION(x) Nan::ThrowError(x)
 
 void callback(char* data, void* hint) {
-  free(data);
+    free(data);
 }
 
 using namespace node;
@@ -21,161 +19,76 @@ using namespace v8;
 using namespace Nan;
 
 NAN_METHOD(cryptonight) {
-
-    bool fast = false;
-
-    if (info.Length() < 1)
-        return THROW_ERROR_EXCEPTION("You must provide one argument.");
-    
-    if (info.Length() >= 2) {
-        if(!info[1]->IsBoolean())
-            return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean");
-        fast = info[1]->ToBoolean()->BooleanValue();
-    }
+    if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
 
     Local<Object> target = info[0]->ToObject();
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 1 should be a buffer object.");
 
-    if(!Buffer::HasInstance(target))
-        return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
+    int variant = 0;
 
-    char * input = Buffer::Data(target);
+    if (info.Length() >= 2) {
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        variant = info[1]->ToBoolean()->BooleanValue();
+    }
+
     char output[32];
-    
-    uint32_t input_len = Buffer::Length(target);
-
-    if(fast)
-        cryptonight_fast_hash(input, output, input_len);
-    else
-        cryptonight_hash(input, output, input_len);
+    slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant, false);
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
-    info.GetReturnValue().Set(
-        returnValue
-    );
+    info.GetReturnValue().Set(returnValue);
 }
 
-class CNAsyncWorker : public Nan::AsyncWorker{
+class CNAsyncWorker : public Nan::AsyncWorker {
+
+    private:
+
+        uint32_t m_input_len;
+        char* m_input;
+        int m_variant;
+        char m_output[32];
+
     public:
-        CNAsyncWorker(Nan::Callback *callback, char * input, uint32_t input_len)
-            : Nan::AsyncWorker(callback), input(input), input_len(input_len){}
+
+        CNAsyncWorker(Nan::Callback* const callback, const char* const input, const uint32_t input_len, const int variant)
+            : Nan::AsyncWorker(callback), m_input(input), m_input_len(input_len), m_variant(variant) {}
+
         ~CNAsyncWorker() {}
 
-    void Execute () {
-        cryptonight_hash(input, output, input_len);
-      }
+        void Execute () {
+            slow_hash(m_input, m_input_len, m_output, m_variant);
+        }
 
-    void HandleOKCallback () {
-        Nan::HandleScope scope;
+        void HandleOKCallback () {
+            Nan::HandleScope scope;
 
-        v8::Local<v8::Value> argv[] = {
-            Nan::Null()
-          , v8::Local<v8::Value>(Nan::CopyBuffer(output, 32).ToLocalChecked())
-        };
-
-        callback->Call(2, argv);
-      }
-
-    private:
-        uint32_t input_len;
-        char * input;
-        char output[32];
+            v8::Local<v8::Value> argv[] = {
+                Nan::Null(),
+                v8::Local<v8::Value>(Nan::CopyBuffer(m_output, 32).ToLocalChecked())
+            };
+            callback->Call(2, argv);
+        }
 };
 
-NAN_METHOD(CNAsync) {
+NAN_METHOD(cryptonight_async) {
+    if (info.Length() < 2) return THROW_ERROR_EXCEPTION("You must provide at least two arguments.");
 
-    if (info.Length() != 2)
-        return THROW_ERROR_EXCEPTION("You must provide two arguments.");
+    Callback *callback = new Nan::Callback(info[0].As<v8::Function>());
+    Local<Object> target = info[1]->ToObject();
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 2 should be a buffer object.");
 
-    Local<Object> target = info[0]->ToObject();
-    Callback *callback = new Nan::Callback(info[1].As<v8::Function>());
+    int variant = 0;
 
-    char * input = Buffer::Data(target);
-    uint32_t input_len = Buffer::Length(target);
-
-    Nan::AsyncQueueWorker(new CNAsyncWorker(callback, input, input_len));
-}
-
-class CNLAsyncWorker : public Nan::AsyncWorker{
-    public:
-        CNLAsyncWorker(Nan::Callback *callback, char * input, uint32_t input_len)
-            : Nan::AsyncWorker(callback), input(input), input_len(input_len){}
-        ~CNLAsyncWorker() {}
-
-    void Execute () {
-        cryptonight_light_hash(input, output, input_len);
-      }
-
-    void HandleOKCallback () {
-        Nan::HandleScope scope;
-
-        v8::Local<v8::Value> argv[] = {
-            Nan::Null()
-          , v8::Local<v8::Value>(Nan::CopyBuffer(output, 32).ToLocalChecked())
-        };
-
-        callback->Call(2, argv);
-      }
-
-    private:
-        uint32_t input_len;
-        char * input;
-        char output[32];
-};
-
-NAN_METHOD(CNLAsync) {
-
-    if (info.Length() != 2)
-        return THROW_ERROR_EXCEPTION("You must provide two arguments.");
-
-    Local<Object> target = info[0]->ToObject();
-    Callback *callback = new Nan::Callback(info[1].As<v8::Function>());
-
-    char * input = Buffer::Data(target);
-    uint32_t input_len = Buffer::Length(target);
-
-    Nan::AsyncQueueWorker(new CNLAsyncWorker(callback, input, input_len));
-}
-
-NAN_METHOD(cryptonight_light) {
-
-    bool fast = false;
-
-    if (info.Length() < 1)
-        return THROW_ERROR_EXCEPTION("You must provide one argument.");
-
-    if (info.Length() >= 2) {
-        if(!info[1]->IsBoolean())
-            return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean");
-        fast = info[1]->ToBoolean()->BooleanValue();
+    if (info.Length() >= 3) {
+        if(!info[2]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 3 should be a number");
+        variant = info[2]->ToBoolean()->BooleanValue();
     }
 
-    Local<Object> target = info[0]->ToObject();
-
-    if(!Buffer::HasInstance(target))
-        return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
-
-    char * input = Buffer::Data(target);
-    char output[32];
-
-    uint32_t input_len = Buffer::Length(target);
-
-    if(fast)
-        cryptonight_light_fast_hash(input, output, input_len);
-    else
-        cryptonight_light_hash(input, output, input_len);
-
-    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
-    info.GetReturnValue().Set(
-        returnValue
-    );
+    Nan::AsyncQueueWorker(new CNAsyncWorker(callback, Buffer::Data(target), Buffer::Length(target), variant));
 }
-
 
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
-    Nan::Set(target, Nan::New("CNAsync").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(CNAsync)).ToLocalChecked());
-    Nan::Set(target, Nan::New("cryptonight_light").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light)).ToLocalChecked());
-    Nan::Set(target, Nan::New("CNLAsync").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(CNAsync)).ToLocalChecked());
+    Nan::Set(target, Nan::New("cryptonight_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_async)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)

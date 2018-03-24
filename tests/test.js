@@ -9,11 +9,6 @@ let hashes = {
         'fileFormat': 'cn',
         'function': multiHashing.cryptonight
     },
-    'CryptoNight-Light': {
-        'file': 'cryptonight_light.txt',
-        'fileFormat': 'cn',
-        'function': multiHashing.cryptonight_light
-    }
 };
 
 for (let hashType in hashes){

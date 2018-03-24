@@ -1,6 +1,6 @@
 {
     "name": "multi-hashing",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "main": "multihashing",
     "author": {
         "name": "Multiple",
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/snipa22/node-multi-hashing-aesni.git"
+        "url": "https://github.com/MoneroOcean/node-multi-hashing-aesni.git"
     },
     "dependencies" : {
         "bindings" : "*",
@@ -16,6 +16,5 @@
     },
     "keywords": [
         "cryptonote",
-        "cryptonote-light"
     ]
 }

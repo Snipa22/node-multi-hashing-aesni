@@ -5,12 +5,12 @@ let lineReader = require('readline');
 
 let testsFailed = 0, testsPassed = 0, line_count=0;
 let lr = lineReader.createInterface({
-     input: fs.createReadStream('cn.txt')
+     input: fs.createReadStream('cryptonight.txt')
 });
 lr.on('line', function (line) {
     let line_data = line.split(' ');
     line_count += 1;
-    multiHashing.CNAsync(Buffer.from(line_data[1]), function(err, result){
+    multiHashing.cryptonight_async(Buffer.from(line_data[1]), function(err, result){
         if (line_data[0] !== result.toString('hex')){
             testsFailed += 1;
         } else {
@@ -21,9 +21,9 @@ lr.on('line', function (line) {
         }
         if (line_count === (testsFailed + testsPassed)){
             if (testsFailed > 0){
-                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: CN-Async');
+                console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight_async');
             } else {
-                console.log(testsPassed + ' tests passed on: CN-Async');
+                console.log(testsPassed + ' tests passed on: cryptonight_async');
             }
         }
     });

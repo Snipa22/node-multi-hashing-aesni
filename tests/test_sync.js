@@ -5,7 +5,7 @@ let lineReader = require('readline');
 
 let testsFailed = 0, testsPassed = 0;
 let lr = lineReader.createInterface({
-     input: fs.createReadStream('cn.txt')
+     input: fs.createReadStream('cryptonight.txt')
 });
 lr.on('line', function (line) {
      let line_data = line.split(' ');
