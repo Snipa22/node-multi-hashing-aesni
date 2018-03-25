@@ -27,9 +27,9 @@ NAN_METHOD(cryptonight_variant) {
         return THROW_ERROR_EXCEPTION("You must provide two arguments.");
 
         if (info.Length() >= 2) {
-            if (args[1]->IsBoolean())
+            if (info[1]->IsBoolean())
                 fast = info[1]->ToBoolean()->BooleanValue();
-            else if (args[1]->IsUint32())
+            else if (info[1]->IsUint32())
                 cn_variant = info[1]->ToUint32()->Uint32Value();
             else
                 return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean or uint32_t");
@@ -85,7 +85,7 @@ NAN_METHOD(cryptonight) {
         if (fast)
         cryptonight_fast_hash(input, output, input_len);
         else
-        cryptonight_hash(input, output, input_len, cn_variant);
+        cryptonight_hash(input, output, input_len, 0);
 
         v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
         info.GetReturnValue().Set(
