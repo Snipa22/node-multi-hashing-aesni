@@ -55,7 +55,7 @@ union cn_slow_hash_state {
   } \
   const uint64_t tweak1_2 = variant > 0 ? *(const uint64_t*)(((const uint8_t*)input)+35) ^ ctx->state.hs.w[24] : 0
 
-STATIC INLINE void xor64(uint64_t *a, const uint64_t b)
+static inline void xor64(uint64_t *a, const uint64_t b)
 {
     *a ^= b;
 }
