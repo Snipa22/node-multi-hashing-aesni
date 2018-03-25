@@ -131,6 +131,8 @@ NAN_METHOD(cryptonight_light) {
 NAN_MODULE_INIT(init) {
         Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(),
                  Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
+        Nan::Set(target, Nan::New("cryptonight_variant").ToLocalChecked(),
+        Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_variant)).ToLocalChecked());
         Nan::Set(target, Nan::New("cryptonight_light").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light)).ToLocalChecked());
 }
 

@@ -42,10 +42,10 @@ union cn_slow_hash_state {
   } while(0)
 
 #define VARIANT1_2(p) \
-    do if (variant > 0) \
-   { \
-     ((uint64_t*)p)[1] ^= tweak1_2; \
-   } while(0)
+  do if (variant > 0) \
+  { \
+    xor64(p, tweak1_2); \
+  } while(0)
 
 #define VARIANT1_INIT() \
   if (variant > 0 && len < 43) \
@@ -54,6 +54,11 @@ union cn_slow_hash_state {
     _exit(1); \
   } \
   const uint64_t tweak1_2 = variant > 0 ? *(const uint64_t*)(((const uint8_t*)input)+35) ^ ctx->state.hs.w[24] : 0
+
+STATIC INLINE void xor64(uint64_t *a, const uint64_t b)
+{
+    *a ^= b;
+}
 
 static void do_blake_hash(const void *input, size_t len, char *output) {
     blake256_hash((uint8_t *) output, input, len);
@@ -406,7 +411,7 @@ void cryptonight_hash(const char *input, char *output, uint32_t len, int variant
 
         b_x = _mm_xor_si128(b_x, c_x);
         _mm_store_si128((__m128i * ) & ctx->long_state[a[0] & 0x1FFFF0], b_x);
-        VARIANT1_1((uint8_t * ) & ctx->long_state[a[0] & 0x1FFFF0]);
+        VARIANT1_1(&ctx->long_state[a[0] & 0x1FFFF0]);
 
         uint64_t *nextblock = (uint64_t * ) & ctx->long_state[c[0] & 0x1FFFF0];
         uint64_t b[2];
@@ -434,7 +439,7 @@ void cryptonight_hash(const char *input, char *output, uint32_t len, int variant
         a[0] ^= b[0];
         a[1] ^= b[1];
         b_x = c_x;
-        VARIANT1_2((uint8_t * ) & ctx->long_state[e2i(ctx->c) * AES_BLOCK_SIZE]);
+        VARIANT1_2(dst + 1);
         __builtin_prefetch(&ctx->long_state[a[0] & 0x1FFFF0], 0, 3);
     }
 
