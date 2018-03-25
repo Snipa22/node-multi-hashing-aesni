@@ -102,7 +102,10 @@ class CCryptonightAsync : public Nan::AsyncWorker {
             m_ctx->memory = static_cast<uint8_t *>(_mm_malloc(MONERO_MEMORY * 2, 16));
         }
 
-        ~CCryptonightAsync() {}
+        ~CCryptonightAsync() {
+            _mm_free(m_ctx->memory);
+            _mm_free(m_ctx);
+        }
 
         void Execute () {
             //cn_slow_hash(m_input, m_input_len, m_output, m_variant);
@@ -162,10 +165,13 @@ class CCryptonightLightAsync : public Nan::AsyncWorker {
         CCryptonightLightAsync(Nan::Callback* const callback, const char* const input, const uint32_t input_len, const int variant)
             : Nan::AsyncWorker(callback), m_ctx(static_cast<cryptonight_ctx *>(_mm_malloc(sizeof(cryptonight_ctx), 16))),
               m_input(input), m_input_len(input_len), m_variant(variant) {
-            m_ctx->memory = static_cast<uint8_t *>(_mm_malloc(MONERO_MEMORY * 2, 16));
+            m_ctx->memory = static_cast<uint8_t *>(_mm_malloc(AEON_MEMORY * 2, 16));
         }
 
-        ~CCryptonightLightAsync() {}
+        ~CCryptonightLightAsync() {
+            _mm_free(m_ctx->memory);
+            _mm_free(m_ctx);
+        }
 
         void Execute () {
             //cn_slow_hash(m_input, m_input_len, m_output, m_variant);
