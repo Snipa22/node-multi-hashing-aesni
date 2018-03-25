@@ -1,7 +1,7 @@
 {
     "targets": [
         {
-            "target_name": "multihashing",
+            "target_name": "cryptonight-hashing",
             "sources": [
                 "multihashing.cc",
                 "xmrig/crypto/c_blake256.c",

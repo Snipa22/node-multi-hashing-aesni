@@ -5,11 +5,11 @@ let lineReader = require('readline');
 
 let testsFailed = 0, testsPassed = 0;
 let lr = lineReader.createInterface({
-     input: fs.createReadStream('cryptonight.txt')
+     input: fs.createReadStream('cryptonight_light.txt')
 });
 lr.on('line', function (line) {
      let line_data = line.split(/ (.+)/);
-     let result = multiHashing.cryptonight(Buffer.from(line_data[1])).toString('hex');
+     let result = multiHashing.cryptonight_light(Buffer.from(line_data[1])).toString('hex');
      if (line_data[0] !== result){
          console.error(line_data[1] + ": " + result);
          testsFailed += 1;
@@ -19,8 +19,8 @@ lr.on('line', function (line) {
 });
 lr.on('close', function(){
     if (testsFailed > 0){
-        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight');
+        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight_light');
     } else {
-        console.log(testsPassed + ' tests passed on: cryptonight');
+        console.log(testsPassed + ' tests passed on: cryptonight_light');
     }
 });

@@ -1,5 +1,5 @@
 "use strict";
-let multiHashing = require('../build/Release/multihashing');
+let multiHashing = require('../build/Release/cryptonight-hashing');
 let fs = require('fs');
 let lineReader = require('readline');
 
