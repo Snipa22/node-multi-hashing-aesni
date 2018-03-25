@@ -42,7 +42,7 @@ NAN_METHOD(cryptonight) {
     }
 
     char output[32];
-    cn_slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant);
+    //cn_slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant);
     init_ctx();
     switch (variant) {
        case 0: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, false, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
@@ -77,7 +77,7 @@ class CNAsyncWorker : public Nan::AsyncWorker {
         ~CNAsyncWorker() {}
 
         void Execute () {
-            cn_slow_hash(m_input, m_input_len, m_output, m_variant);
+            //cn_slow_hash(m_input, m_input_len, m_output, m_variant);
             switch (m_variant) {
                 case 0: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, false, 0>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
                         break;
