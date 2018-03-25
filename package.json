@@ -1,20 +1,24 @@
 {
-    "name": "multi-hashing",
+    "name": "cryptonight-hashing",
     "version": "0.12.0",
-    "main": "multihashing",
+    "main": "cryptonight-hashing",
     "author": {
         "name": "Multiple",
         "email": "Check The Git Repo"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/MoneroOcean/node-multi-hashing-aesni.git"
+        "url": "https://github.com/MoneroOcean/node-cryptonight-hashing.git"
     },
     "dependencies" : {
         "bindings" : "*",
         "nan": "^2.0.0"
     },
     "keywords": [
-        "cryptonote"
+        "cryptonight",
+        "cryptonote",
+        "forknote",
+        "bytecoin",
+        "monero"
     ]
 }

@@ -124,4 +124,4 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_async)).ToLocalChecked());
 }
 
-NODE_MODULE(multihashing, init)
+NODE_MODULE(cryptonight, init)
