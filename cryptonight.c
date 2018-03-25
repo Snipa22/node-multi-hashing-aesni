@@ -438,8 +438,8 @@ void cryptonight_hash(const char *input, char *output, uint32_t len, int variant
 
         a[0] ^= b[0];
         a[1] ^= b[1];
-        b_x = c_x;
         VARIANT1_2(dst + 1);
+        b_x = c_x;
         __builtin_prefetch(&ctx->long_state[a[0] & 0x1FFFF0], 0, 3);
     }
 
