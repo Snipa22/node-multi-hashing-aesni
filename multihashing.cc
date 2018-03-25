@@ -28,9 +28,9 @@ NAN_METHOD(cryptonight_variant) {
 
         if (info.Length() >= 2) {
             if (args[1]->IsBoolean())
-                fast = args[1]->ToBoolean()->BooleanValue();
+                fast = info[1]->ToBoolean()->BooleanValue();
             else if (args[1]->IsUint32())
-                cn_variant = args[1]->ToUint32()->Uint32Value();
+                cn_variant = info[1]->ToUint32()->Uint32Value();
             else
                 return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean or uint32_t");
         }
