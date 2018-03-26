@@ -1,16 +1,13 @@
-node-multi-hashing
+node-cryptonight-hashing
 ===============
 
-[![Build Status](https://travis-ci.org/zone117x/node-multi-hashing.png?branch=master)](https://travis-ci.org/zone117x/node-multi-hashing)
-
-[![NPM](https://nodei.co/npm/multi-hashing.png?downloads=true&stars=true)](https://nodei.co/npm/multi-hashing/)
-
-Cryptocurrency hashing functions for node.js.
+Cryptonight hashing functions for node.js.
 
 
 Algorithms
 ----------
 * cryptonight
+* cryptonight-light
 
 Usage
 -----
@@ -18,15 +15,15 @@ Usage
 Install
 
 ```bash
-npm install multi-hashing
+npm install https://github.com/MoneroOcean/node-cryptonight-hashing.git
 ```
 
 So far this native Node.js addon can do the following hashing algos
 
 ```javascript
-var multiHashing = require('multi-hashing');
+var multiHashing = require('cryptonight-hashing');
 
-var algorithms = ['quark', 'x11', 'scrypt', 'scryptn', 'scryptjane', 'keccak', 'bcrypt', 'skein', 'blake'];
+var algorithms = ['cryptonight', 'cryptonight-light' ];
 
 var data = new Buffer("7000000001e980924e4e1109230383e66d62945ff8e749903bea4336755c00000000000051928aff1b4d72416173a8c3948159a09a73ac3bb556aa6bfbcad1a85da7f4c1d13350531e24031b939b9e2b", "hex");
 
@@ -51,14 +48,5 @@ console.log(hashedData);
 
 Credits
 -------
-* [NSA](http://www.nsa.gov/) and [NIST](http://www.nist.gov/) for creation or sponsoring creation of SHA2 and SHA3 algos
-* [Keccak](http://en.wikipedia.org/wiki/Keccak) - Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche
-* [Skein](http://en.wikipedia.org/wiki/Skein_(hash_function)) - Bruce Schneier, Stefan Lucks, Niels Ferguson, Doug Whiting, Mihir Bellare, Tadayoshi Kohno, Jon Callas and Jesse Walker.
-* [BLAKE](http://en.wikipedia.org/wiki/BLAKE_(hash_function)) - Jean-Philippe Aumasson, Luca Henzen, Willi Meier, and Raphael C.-W. Phan
-* [Grøstl](http://en.wikipedia.org/wiki/Gr%C3%B8stl) - Praveen Gauravaram, Lars Knudsen, Krystian Matusiewicz, Florian Mendel, Christian Rechberger, Martin Schläffer, and Søren S. Thomsen
-* [JH](http://en.wikipedia.org/wiki/JH_(hash_function)) - Hongjun Wu
-* [Fugue](http://en.wikipedia.org/wiki/Fugue_(hash_function)) - Shai Halevi, William E. Hall, and Charanjit S. Jutla
-* [scrypt](http://en.wikipedia.org/wiki/Scrypt) - Colin Percival
-* [bcrypt](http://en.wikipedia.org/wiki/Bcrypt) - Niels Provos and David Mazières
-* [X11](http://www.darkcoin.io/), [Hefty1](http://heavycoin.github.io/about.html), [Quark](http://www.qrk.cc/) creators (they just mixed together a bunch of the above algos)
-* [Wolf0](https://github.com/Wolf9466)/[OhGodAGirl](https://github.com/ohgodagirl) - Rebuilding the Cryptonote functions to use AES-NI for speed purposes
+* [The Monero Project](https://github.com/monero-project) - For reference cryptonight implementations from [Monero](https://github.com/monero-project/monero)
+* [XMrig](https://github.com/xmrig) - For advanced cryptonight implementations from [XMrig](https://github.com/xmrig/xmrig)
