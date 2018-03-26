@@ -11,10 +11,10 @@
 #include "xmrig/CryptoNight_x86.h"
 
 #if defined(__AES__) && (__AES__ == 1)
-#defined SOFT_AES false
+#define SOFT_AES false
 #else
 #warning Using software AES
-#defined SOFT_AES true
+#define SOFT_AES true
 #endif
 
 static struct cryptonight_ctx* ctx = NULL;
