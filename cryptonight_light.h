@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 
-void cryptonight_light_hash(const char* input, char* output, uint32_t len);
+void cryptonight_light_hash(const char* input, char* output, uint32_t len, int variant);
 void cryptonight_light_fast_hash(const char* input, char* output, uint32_t len);
 
 #ifdef __cplusplus

@@ -1,7 +1,11 @@
 // Copyright (c) 2012-2013 The Cryptonote developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// Portions Copyright (c) 2018 The Monero developers
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "crypto/oaes_lib.h"
 #include "crypto/c_keccak.h"
 #include "crypto/c_groestl.h"
@@ -28,6 +32,29 @@ union cn_slow_hash_state {
     };
 };
 #pragma pack(pop)
+
+#define VARIANT1_1(p) \
+  do if (variant > 0) \
+  { \
+	const uint8_t tmp = ((const uint8_t*)(p))[11]; \
+    static const uint32_t table = 0x75310; \
+    const uint8_t index = (((tmp >> 3) & 6) | (tmp & 1)) << 1; \
+    ((uint8_t*)(p))[11] = tmp ^ ((table >> index) & 0x30); \
+    } while(0) 
+
+#define VARIANT1_2(p) \
+   do if (variant > 0) \
+   { \
+     ((uint64_t*)p)[1] ^= tweak1_2; \
+    } while(0) 
+
+#define VARIANT1_INIT() \
+  if (variant > 0 && len < 43) \
+  { \
+    fprintf(stderr, "Cryptonight variants need at least 43 bytes of data"); \
+    _exit(1); \
+  } \
+  const uint64_t tweak1_2 = variant > 0 ? *(const uint64_t*)(((const uint8_t*)input)+35) ^ ctx->state.hs.w[24] : 0 
 
 static void do_blake_hash(const void* input, size_t len, char* output) {
     blake256_hash((uint8_t*)output, input, len);
@@ -326,13 +353,14 @@ struct cryptonight_ctx {
     oaes_ctx* aes_ctx;
 };
 
-void cryptonight_hash(const char* input, char* output, uint32_t len) {
+void cryptonight_hash(const char* input, char* output, uint32_t len, int variant) {
     struct cryptonight_ctx *ctx = alloca(sizeof(struct cryptonight_ctx));
     uint8_t ExpandedKey[256];
     
     CNKeccak(&ctx->state.hs, input);
+    VARIANT1_INIT();
     
-   memcpy(ctx->text, ctx->state.init, INIT_SIZE_BYTE);
+    memcpy(ctx->text, ctx->state.init, INIT_SIZE_BYTE);
     memcpy(ExpandedKey, ctx->state.hs.b, AES_KEY_SIZE);
     ExpandAESKey256(ExpandedKey);
     
@@ -390,7 +418,7 @@ void cryptonight_hash(const char* input, char* output, uint32_t len) {
 	
 	b_x = _mm_xor_si128(b_x, c_x);
 	_mm_store_si128((__m128i *)&ctx->long_state[a[0] & 0x1FFFF0], b_x);
-
+	VARIANT1_1(&ctx->long_state[a[0] & 0x1FFFF0]);
 	uint64_t *nextblock = (uint64_t *)&ctx->long_state[c[0] & 0x1FFFF0];
 	uint64_t b[2];
 	b[0] = nextblock[0];
@@ -413,7 +441,7 @@ void cryptonight_hash(const char* input, char* output, uint32_t len) {
 	uint64_t *dst = &ctx->long_state[c[0] & 0x1FFFF0];
 	dst[0] = a[0];
 	dst[1] = a[1];
-
+	VARIANT1_2(&ctx->long_state[c[0] & 0x1FFFF0]);
 	a[0] ^= b[0];
 	a[1] ^= b[1];
 	b_x = c_x;
