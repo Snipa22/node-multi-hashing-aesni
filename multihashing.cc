@@ -52,11 +52,11 @@ NAN_METHOD(cryptonight) {
     //cn_slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant);
     init_ctx();
     switch (variant) {
-       case 0: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
-               break;
-       case 1: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
-               break;
-       default: return THROW_ERROR_EXCEPTION("Unknown PoW variant");
+       case 0:  cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+                break;
+       case 1:  cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+                break;
+       default: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
     }
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
@@ -80,11 +80,11 @@ NAN_METHOD(cryptonight_light) {
     //cn_slow_hash(Buffer::Data(target), Buffer::Length(target), output, variant);
     init_ctx();
     switch (variant) {
-       case 0: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
-               break;
-       case 1: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
-               break;
-       default: return THROW_ERROR_EXCEPTION("Unknown PoW variant");
+       case 0:  cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+                break;
+       case 1:  cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+                break;
+       default: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
     }
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
@@ -117,11 +117,11 @@ class CCryptonightAsync : public Nan::AsyncWorker {
         void Execute () {
             //cn_slow_hash(m_input, m_input_len, m_output, m_variant);
             switch (m_variant) {
-                case 0: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
-                        break;
-                case 1: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
-                        break;
-                default: return THROW_ERROR_EXCEPTION("Unknown PoW variant");
+                case 0:  cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
+                         break;
+                case 1:  cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
+                         break;
+                default: cryptonight_single_hash<MONERO_ITER, MONERO_MEMORY, MONERO_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
             }
         }
 
@@ -183,11 +183,11 @@ class CCryptonightLightAsync : public Nan::AsyncWorker {
         void Execute () {
             //cn_slow_hash(m_input, m_input_len, m_output, m_variant);
             switch (m_variant) {
-                case 0: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
-                        break;
-                case 1: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
-                        break;
-                default: return THROW_ERROR_EXCEPTION("Unknown PoW variant");
+                case 0:  cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 0>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
+                         break;
+                case 1:  cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
+                         break;
+                default: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, SOFT_AES, 1>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), m_ctx);
             }
         }
 
