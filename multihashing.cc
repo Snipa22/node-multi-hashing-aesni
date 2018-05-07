@@ -290,7 +290,7 @@ class CCryptonightHeavyAsync : public Nan::AsyncWorker {
         }
 };
 
-NAN_METHOD(cryptonight_light_heavy) {
+NAN_METHOD(cryptonight_heavy_async) {
     if (info.Length() < 2) return THROW_ERROR_EXCEPTION("You must provide at least two arguments.");
 
     Local<Object> target = info[0]->ToObject();
