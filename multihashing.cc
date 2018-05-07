@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <nan.h>
 
-#include "xmrig/CryptoNight_x86.h"
+#include "xmrig/crypto/CryptoNight_x86.h"
 
 #if defined(__AES__) && (__AES__ == 1)
 #define SOFT_AES false
