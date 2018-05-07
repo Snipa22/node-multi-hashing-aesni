@@ -93,7 +93,7 @@ class CCryptonightAsync : public Nan::AsyncWorker {
 
     private:
 
-        struct cryptonight_ctx* const m_ctx;
+        struct cryptonight_ctx* m_ctx;
         const char* const m_input;
         const uint32_t m_input_len;
         const int m_variant;
@@ -160,7 +160,7 @@ class CCryptonightLightAsync : public Nan::AsyncWorker {
 
     private:
 
-        struct cryptonight_ctx* const m_ctx;
+        struct cryptonight_ctx* m_ctx;
         const char* const m_input;
         const uint32_t m_input_len;
         const int m_variant;
