@@ -11,13 +11,14 @@
                 "xmrig/common/crypto/keccak.cpp"
             ],
             "include_dirs": [
+                "xmrig",
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
-                "-Ixmrig -std=gnu11 -fpermissive -march=native -fPIC -m64 -DNDEBUG -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
+                "-std=gnu11 -fpermissive -march=native -fPIC -m64 -DNDEBUG -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
             ],
             "cflags_cc": [
-                "-Ixmrig -std=gnu++11 -fpermissive -march=native -fPIC -m64 -DNDEBUG -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
+                "-std=gnu++11 -fpermissive -march=native -fPIC -m64 -DNDEBUG -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
             ]
         }
     ]
