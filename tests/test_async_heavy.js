@@ -10,7 +10,7 @@ let lr = lineReader.createInterface({
 lr.on('line', function (line) {
      let line_data = line.split(/ (.+)/);
      line_count += 1;
-     multiHashing.cryptonight_heavy_async(Buffer.from(line_data[1]), function(err, result){
+     multiHashing.cryptonight_heavy_async(Buffer.from(line_data[1], 'hex'), function(err, result){
          result = result.toString('hex');
          if (line_data[0] !== result){
              console.error(line_data[1] + ": " + result);
