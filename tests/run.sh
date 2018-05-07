@@ -6,11 +6,15 @@ cd $DIR
 node compare_both.js
 node test.js
 node test_async.js
+node test_async_light.js
+node test_async_heavy.js
 node test_sync-1.js
 node test_sync-xtl.js
 node test_sync.js
 node test_sync_light.js
 node test_sync_light-1.js
 node test_sync_light-ipbc.js
+node test_sync_heavy.js
 node test_perf.js
 node test_perf_light.js
+node test_perf_heavy.js
