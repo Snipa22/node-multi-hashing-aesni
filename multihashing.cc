@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <nan.h>
 
-#include "xmrig/xmrig.h"
 #include "xmrig/CryptoNight_x86.h"
 
 #if defined(__AES__) && (__AES__ == 1)
