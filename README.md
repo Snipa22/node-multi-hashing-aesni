@@ -6,8 +6,9 @@ Cryptonight hashing functions for node.js.
 
 Algorithms
 ----------
-* cryptonight
-* cryptonight-light
+* cryptonight (v0, v1, xtl)
+* cryptonight-light (v0, v1, ipbc)
+* cryptonight-heavy
 
 Usage
 -----
