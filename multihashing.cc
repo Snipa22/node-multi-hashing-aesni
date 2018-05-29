@@ -5,7 +5,7 @@
 #include <nan.h>
 
 #if defined(__AES__) && (__AES__ == 1)
-#else
+#elseif !defined(__APPLE__)
 #define _mm_aeskeygenassist_si128(a, b) a
 #define _mm_aesenc_si128(a, b) a
 #endif
