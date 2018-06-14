@@ -10,6 +10,14 @@ extern "C" {
     #include "cryptonight_light.h"
 }
 
+static struct cryptonight_ctx* ctx = NULL;
+
+void init_ctx() {
+    if (ctx) return;
+    ctx = static_cast<cryptonight_ctx *>(_mm_malloc(sizeof(cryptonight_ctx), 16));
+    ctx->memory = static_cast<uint8_t *>(_mm_malloc(xmrig::CRYPTONIGHT_HEAVY_MEMORY, 4096));
+}
+
 #define THROW_ERROR_EXCEPTION(x) Nan::ThrowError(x)
 
 void callback(char* data, void* hint) {
