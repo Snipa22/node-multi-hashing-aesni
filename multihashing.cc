@@ -138,38 +138,34 @@ NAN_METHOD(CNLAsync) {
 
 NAN_METHOD(cryptonight_light) {
 
-    bool fast = false;
-
-    if (info.Length() < 1)
-        return THROW_ERROR_EXCEPTION("You must provide one argument.");
-
-    if (info.Length() >= 2) {
-        if(!info[1]->IsBoolean())
-            return THROW_ERROR_EXCEPTION("Argument 2 should be a boolean");
-        fast = info[1]->ToBoolean()->BooleanValue();
-    }
-
+    if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
+  
     Local<Object> target = info[0]->ToObject();
 
-    if(!Buffer::HasInstance(target))
-        return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
+    if(!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument should be a buffer object.");
+    
+    int variant = 0;
 
-    char * input = Buffer::Data(target);
+    if (info.Length() >= 2) {
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        variant = Nan::To<int>(info[1]).FromMaybe(0);
+    }
+    
     char output[32];
-
-    uint32_t input_len = Buffer::Length(target);
-
-    if(fast)
-        cryptonight_light_fast_hash(input, output, input_len);
-    else
-        cryptonight_light_hash(input, output, input_len);
+    init_ctx();
+    switch (variant) {
+       case 0: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, false, 0>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+               break;
+       case 1: cryptonight_single_hash<AEON_ITER, AEON_MEMORY, AEON_MASK, false, 1>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), ctx);
+               break;
+       default: return THROW_ERROR_EXCEPTION("Unknown PoW variant");
+    }
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
     info.GetReturnValue().Set(
         returnValue
     );
 }
-
 
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
