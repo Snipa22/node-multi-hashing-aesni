@@ -16,10 +16,12 @@
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
-                "-std=gnu11 -march=armv8-a+crypto -fPIC -DNDEBUG -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
+                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto" || echo "-march=native")',
+                "-std=gnu11 -fPIC -DNDEBUG -Ofast -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
             ],
             "cflags_cc": [
-                "-std=gnu++11 -march=armv8-a+crypto -flax-vector-conversions -fPIC -DNDEBUG -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
+                '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto -flax-vector-conversions" || echo "-march=native")',
+                "-std=gnu++11 -fPIC -DNDEBUG -Ofast -s -funroll-loops -fvariable-expansion-in-unroller -ftree-loop-if-convert-stores -fmerge-all-constants -fbranch-target-load-optimize2"
             ]
         }
     ]
