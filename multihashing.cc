@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <nan.h>
 
-#if (defined(__AES__) && (__AES__ == 1)) || defined(__ARM_NEON) || defined(__APPLE__) || defined(__ARM_ARCH)
+#if (defined(__AES__) && (__AES__ == 1)) || defined(__APPLE__) || defined(__ARM_ARCH)
 #else
 #define _mm_aeskeygenassist_si128(a, b) a
 #define _mm_aesenc_si128(a, b) a
@@ -12,12 +12,13 @@
 
 #if defined(__ARM_ARCH)
 #define XMRIG_ARM 1
+#define __ARM_FEATURE_CRYPTO 1
 #include "xmrig/crypto/CryptoNight_arm.h"
 #else
 #include "xmrig/crypto/CryptoNight_x86.h"
 #endif
 
-#if (defined(__AES__) && (__AES__ == 1)) || defined(__ARM_NEON)
+#if (defined(__AES__) && (__AES__ == 1)) || (defined(__ARM_NEON) && (__ARM_NEON == 1))
 #define SOFT_AES false
 #else
 #warning Using software AES
