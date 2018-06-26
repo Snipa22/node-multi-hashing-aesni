@@ -12,7 +12,7 @@
             ],
             "include_dirs": [
                 "xmrig",
-                "3rdparty",
+                "xmrig/3rdparty",
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
