@@ -10,7 +10,11 @@
 #define _mm_aesenc_si128(a, b) a
 #endif
 
+#if defined(__ARM_ARCH)
+#include "xmrig/crypto/CryptoNight_arm.h"
+#else
 #include "xmrig/crypto/CryptoNight_x86.h"
+#endif
 
 #if defined(__AES__) && (__AES__ == 1)
 #define SOFT_AES false
