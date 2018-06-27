@@ -4,11 +4,11 @@
 #include <stdint.h>
 #include <nan.h>
 
-#if (defined(__AES__) && (__AES__ == 1)) || defined(__APPLE__) || defined(__ARM_ARCH)
-#else
-#define _mm_aeskeygenassist_si128(a, b) a
-#define _mm_aesenc_si128(a, b) a
-#endif
+//#if (defined(__AES__) && (__AES__ == 1)) || defined(__APPLE__) || defined(__ARM_ARCH)
+//#else
+//#define _mm_aeskeygenassist_si128(a, b) a
+//#define _mm_aesenc_si128(a, b) a
+//#endif
 
 #if defined(__ARM_ARCH)
 #define XMRIG_ARM 1
