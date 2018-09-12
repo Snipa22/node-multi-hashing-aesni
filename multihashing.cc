@@ -66,9 +66,11 @@ NAN_METHOD(cryptonight) {
                 break;
        case 4:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_MSR>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
                 break;
-       case 5:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_XAO>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
+       case 6:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_XAO>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
                 break;
-       case 6:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_RTO>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
+       case 7:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_RTO>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
+                break;
+       case 8:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_2>  (reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
                 break;
        default: cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_1>  (reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
     }
@@ -133,6 +135,8 @@ NAN_METHOD(cryptonight_heavy) {
     info.GetReturnValue().Set(returnValue);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class CCryptonightAsync : public Nan::AsyncWorker {
 
     private:
@@ -166,9 +170,11 @@ class CCryptonightAsync : public Nan::AsyncWorker {
                          break;
                 case 4:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_MSR>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
                          break;
-                case 5:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_XAO>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
+                case 6:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_XAO>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
                          break;
-                case 6:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_RTO>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
+                case 7:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_RTO>(reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
+                         break;
+                case 8:  cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_2>  (reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
                          break;
                 default: cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_1>  (reinterpret_cast<const uint8_t*>(m_input), m_input_len, reinterpret_cast<uint8_t*>(m_output), &m_ctx);
             }
@@ -181,7 +187,7 @@ class CCryptonightAsync : public Nan::AsyncWorker {
                 Nan::Null(),
                 v8::Local<v8::Value>(Nan::CopyBuffer(m_output, 32).ToLocalChecked())
             };
-            callback->Call(2, argv);
+            callback->Call(2, argv, async_resource);
         }
 };
 
@@ -246,7 +252,7 @@ class CCryptonightLightAsync : public Nan::AsyncWorker {
                 Nan::Null(),
                 v8::Local<v8::Value>(Nan::CopyBuffer(m_output, 32).ToLocalChecked())
             };
-            callback->Call(2, argv);
+            callback->Call(2, argv, async_resource);
         }
 };
 
@@ -313,7 +319,7 @@ class CCryptonightHeavyAsync : public Nan::AsyncWorker {
                 Nan::Null(),
                 v8::Local<v8::Value>(Nan::CopyBuffer(m_output, 32).ToLocalChecked())
             };
-            callback->Call(2, argv);
+            callback->Call(2, argv, async_resource);
         }
 };
 
@@ -337,6 +343,9 @@ NAN_METHOD(cryptonight_heavy_async) {
     Callback *callback = new Nan::Callback(info[callback_arg_num].As<v8::Function>());
     Nan::AsyncQueueWorker(new CCryptonightHeavyAsync(callback, Buffer::Data(target), Buffer::Length(target), variant));
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
