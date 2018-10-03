@@ -3,7 +3,7 @@
         {
             "target_name": "cryptonight-hashing",
             "sources": [
-                '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cnv2_main_loop.S")',
+                '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cnv2_main_loop.S" || echo)',
                 "multihashing.cc",
                 "xmrig/crypto/c_blake256.c",
                 "xmrig/crypto/c_groestl.c",
