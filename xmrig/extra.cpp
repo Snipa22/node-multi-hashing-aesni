@@ -108,6 +108,6 @@ void xmrig::CpuThread::patchAsmVariants()
     Mem::flushInstructionCache(base, allocation_size);
 }
 
-class Static { Static() { xmrig::CpuThread::patchAsmVariants() } };
+class Static { Static() { xmrig::CpuThread::patchAsmVariants() }; } s;
 
 #endif
