@@ -24,46 +24,30 @@
  */
 
 
-#include "common/utils/mm_malloc.h"
-#include "crypto/CryptoNight.h"
-#include "crypto/CryptoNight_constants.h"
+#include <stdlib.h>
+#include <sys/mman.h>
+
 #include "Mem.h"
 
-
-bool Mem::m_enabled = true;
-int Mem::m_flags    = 0;
-
-
-MemInfo Mem::create(cryptonight_ctx **ctx, xmrig::Algo algorithm, size_t count)
+void *Mem::allocateExecutableMemory(size_t size)
 {
-    using namespace xmrig;
-
-    MemInfo info;
-    info.size = cn_select_memory(algorithm) * count;
-
-    constexpr const size_t align_size = 2 * 1024 * 1024;
-    info.size  = ((info.size + align_size - 1) / align_size) * align_size;
-    info.pages = info.size / align_size;
-
-    allocate(info, m_enabled);
-
-    for (size_t i = 0; i < count; ++i) {
-        cryptonight_ctx *c = static_cast<cryptonight_ctx *>(_mm_malloc(sizeof(cryptonight_ctx), 4096));
-        c->memory          = info.memory + (i * cn_select_memory(algorithm));
-
-        ctx[i] = c;
-    }
-
-    return info;
+#   if defined(__APPLE__)
+    return mmap(0, size, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANON, -1, 0);
+#   else
+    return mmap(0, size, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+#   endif
 }
 
 
-void Mem::release(cryptonight_ctx **ctx, size_t count, MemInfo &info)
+void Mem::protectExecutableMemory(void *p, size_t size)
 {
-    release(info);
-
-    for (size_t i = 0; i < count; ++i) {
-        _mm_free(ctx[i]);
-    }
+    mprotect(p, size, PROT_READ | PROT_EXEC);
 }
 
+
+void Mem::flushInstructionCache(void *p, size_t size)
+{
+#   ifndef __FreeBSD__
+    __builtin___clear_cache(reinterpret_cast<char*>(p), reinterpret_cast<char*>(p) + size);
+#   endif
+}

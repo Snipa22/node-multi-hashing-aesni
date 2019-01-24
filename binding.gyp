@@ -6,7 +6,7 @@
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cn_main_loop.S" || echo)',
                 "multihashing.cc",
                 "xmrig/extra.cpp",
-                "xmrig/Mem.cpp",
+                "xmrig/Mem_unix.cpp",
                 "xmrig/crypto/c_blake256.c",
                 "xmrig/crypto/c_groestl.c",
                 "xmrig/crypto/c_jh.c",
