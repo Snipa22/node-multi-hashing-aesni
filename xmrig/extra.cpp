@@ -27,7 +27,7 @@
 #include "crypto/CryptoNight_constants.h"
 #include "Mem.h"
 
-#ifndef XMRIG_NO_ASM
+#if !defined(__ARM_ARCH) && !defined(XMRIG_NO_ASM)
 template<typename T, typename U>
 static void patchCode(T dst, U src, const uint32_t iterations, const uint32_t mask)
 {
