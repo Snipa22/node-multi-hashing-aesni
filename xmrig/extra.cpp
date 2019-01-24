@@ -22,6 +22,7 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h> // for memcpy
 #include "extra.h"
 #include "crypto/CryptoNight_constants.h"
 #include "Mem.h"
@@ -78,8 +79,8 @@ xmrig::CpuThread::cn_mainloop_fun        cn_trtl_mainloop_ryzen_asm             
 xmrig::CpuThread::cn_mainloop_fun        cn_trtl_mainloop_bulldozer_asm          = nullptr;
 xmrig::CpuThread::cn_mainloop_double_fun cn_trtl_double_mainloop_sandybridge_asm = nullptr;
 
-class patchAsmVariants {
-  patchAsmVariants() {
+void xmrig::CpuThread::patchAsmVariants()
+{
     const int allocation_size = 65536;
     uint8_t *base = static_cast<uint8_t *>(Mem::allocateExecutableMemory(allocation_size));
 
@@ -105,7 +106,8 @@ class patchAsmVariants {
 
     Mem::protectExecutableMemory(base, allocation_size);
     Mem::flushInstructionCache(base, allocation_size);
-  }
-} s;
+}
+
+class Static { Static() { xmrig::CpuThread::patchAsmVariants() } };
 
 #endif

@@ -32,6 +32,10 @@ class CpuThread {
   public:
     typedef void (*cn_mainloop_fun)(cryptonight_ctx *ctx);
     typedef void (*cn_mainloop_double_fun)(cryptonight_ctx *ctx1, cryptonight_ctx *ctx2);
+
+#   ifndef XMRIG_NO_ASM
+    static void patchAsmVariants();
+#   endif
 };
 
 }
