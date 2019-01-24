@@ -14,6 +14,7 @@
 #define XMRIG_ARM 1
 #include "xmrig/crypto/CryptoNight_arm.h"
 #else
+#include "xmrig/extra.h"
 #include "xmrig/crypto/CryptoNight_x86.h"
 #endif
 
