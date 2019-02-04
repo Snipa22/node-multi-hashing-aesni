@@ -4,6 +4,9 @@
             "target_name": "cryptonight-hashing",
             "sources": [
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cn_main_loop.S" || echo)',
+                '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cn_gpu_avx.cpp" || echo)',
+                '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cn_gpu_ssse3.cpp" || echo)',
+                '<!@(uname -a | grep "x86_64" >/dev/null || echo "xmrig/crypto/asm/cn_gpu_arm.cpp" || echo)',
                 "multihashing.cc",
                 "xmrig/extra.cpp",
                 "xmrig/Mem_unix.cpp",
