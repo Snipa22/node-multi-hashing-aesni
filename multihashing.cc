@@ -97,7 +97,7 @@ NAN_METHOD(cryptonight) {
 #endif
                 break;
        case 10:
-                cryptonight_single_hash_gpu<xmrig::CRYPTONIGHT, true, xmrig::VARIANT_GPU>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
+                cryptonight_single_hash_gpu<xmrig::CRYPTONIGHT, false, xmrig::VARIANT_GPU>(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
                 break;
        default: cryptonight_single_hash<xmrig::CRYPTONIGHT, SOFT_AES, xmrig::VARIANT_1>  (reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx);
     }
