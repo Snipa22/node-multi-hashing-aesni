@@ -30,4 +30,5 @@ node test_perf.js
 node test_perf_light.js
 node test_perf_heavy.js
 node test_perf_gpu.js
+node test_perf_wow.js
 node test_perf_pico.js
