@@ -11,7 +11,6 @@
 //#endif
 
 #if defined(__ARM_ARCH)
-#define XMRIG_ARM 1
 #include "xmrig/crypto/CryptoNight_arm.h"
 #else
 #include "xmrig/extra.h"
