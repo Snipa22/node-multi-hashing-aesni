@@ -27,7 +27,67 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
+
+#include "common/utils/mm_malloc.h"
+#include "common/xmrig.h"
+#include "crypto/CryptoNight.h"
 #include "Mem.h"
+
+
+void Mem::init(bool enabled)
+{
+    m_enabled = enabled;
+}
+
+
+void Mem::allocate(MemInfo &info, bool enabled)
+{
+    info.hugePages = 0;
+
+    if (!enabled) {
+        info.memory = static_cast<uint8_t*>(_mm_malloc(info.size, 4096));
+
+        return;
+    }
+
+#   if defined(__APPLE__)
+    info.memory = static_cast<uint8_t*>(mmap(0, info.size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, VM_FLAGS_SUPERPAGE_SIZE_2MB, 0));
+#   elif defined(__FreeBSD__)
+    info.memory = static_cast<uint8_t*>(mmap(0, info.size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_ALIGNED_SUPER | MAP_PREFAULT_READ, -1, 0));
+#   else
+    info.memory = static_cast<uint8_t*>(mmap(0, info.size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB | MAP_POPULATE, 0, 0));
+#   endif
+
+    if (info.memory == MAP_FAILED) {
+        return allocate(info, false);;
+    }
+
+    info.hugePages = info.pages;
+
+    if (madvise(info.memory, info.size, MADV_RANDOM | MADV_WILLNEED) != 0) {
+        //LOG_ERR("madvise failed");
+    }
+
+    if (mlock(info.memory, info.size) == 0) {
+        m_flags |= Lock;
+    }
+}
+
+
+void Mem::release(MemInfo &info)
+{
+    if (info.hugePages) {
+        if (m_flags & Lock) {
+            munlock(info.memory, info.size);
+        }
+
+        munmap(info.memory, info.size);
+    }
+    else {
+        _mm_free(info.memory);
+    }
+}
+
 
 void *Mem::allocateExecutableMemory(size_t size)
 {

@@ -26,12 +26,52 @@
 #ifndef XMRIG_MEM_H
 #define XMRIG_MEM_H
 
+
+#include <stddef.h>
+#include <stdint.h>
+
+
+#include "common/xmrig.h"
+
+
+struct cryptonight_ctx;
+
+
+struct MemInfo
+{
+    alignas(16) uint8_t *memory;
+
+    size_t hugePages;
+    size_t pages;
+    size_t size;
+};
+
+
 class Mem
 {
 public:
+    enum Flags {
+        HugepagesAvailable = 1,
+        HugepagesEnabled   = 2,
+        Lock               = 4
+    };
+
+    static MemInfo create(cryptonight_ctx **ctx, xmrig::Algo algorithm, size_t count);
+    static void init(bool enabled);
+    static void release(cryptonight_ctx **ctx, size_t count, MemInfo &info);
+
     static void *allocateExecutableMemory(size_t size);
     static void protectExecutableMemory(void *p, size_t size);
     static void flushInstructionCache(void *p, size_t size);
+
+    static inline bool isHugepagesAvailable() { return (m_flags & HugepagesAvailable) != 0; }
+
+private:
+    static void allocate(MemInfo &info, bool enabled);
+    static void release(MemInfo &info);
+
+    static int m_flags;
+    static bool m_enabled;
 };
 
 
