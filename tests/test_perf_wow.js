@@ -6,7 +6,7 @@ let input = Buffer.from("test");
 
 let start = Date.now();
 for (let i = ITER; i; -- i) {
-  multiHashing.cryptonight(input, 12);
+  multiHashing.cryptonight(input, 12, i);
 }
 let end = Date.now();
 console.log("Perf: " + 1000 * ITER / (end - start) + " H/s");
