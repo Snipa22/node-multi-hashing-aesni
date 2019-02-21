@@ -1,3 +1,28 @@
+/* XMRig
+ * Copyright 2010      Jeff Garzik <jgarzik@pobox.com>
+ * Copyright 2012-2014 pooler      <pooler@litecoinpool.org>
+ * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
+ * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
+ * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
+ * Copyright 2017-2018 XMR-Stak    <https://github.com/fireice-uk>, <https://github.com/psychocrypt>
+ * Copyright 2018      Lee Clagett <https://github.com/vtnerd>
+ * Copyright 2018-2019 SChernykh   <https://github.com/SChernykh>
+ * Copyright 2016-2019 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <cstring>
 #include "crypto/CryptoNight_monero.h"
 
@@ -6,7 +31,7 @@ typedef void(*void_func)();
 #include "crypto/asm/CryptonightR_template.h"
 #include "Mem.h"
 
-#ifndef XMRIG_ARM
+#if !defined XMRIG_ARM && !defined XMRIG_NO_ASM
 
 static inline void add_code(uint8_t* &p, void (*p1)(), void (*p2)())
 {
@@ -33,7 +58,7 @@ static inline void add_random_math(uint8_t* &p, const V4_Instruction* code, int 
 
         const uint32_t a = inst.dst_index;
         const uint32_t b = inst.src_index;
-        const uint8_t c = opcode | (dst_index << V4_OPCODE_BITS) | (src_index << (V4_OPCODE_BITS + V4_DST_INDEX_BITS));
+        const uint8_t c = opcode | (dst_index << V4_OPCODE_BITS) | (((src_index == 8) ? dst_index : src_index) << (V4_OPCODE_BITS + V4_DST_INDEX_BITS));
 
         switch (inst.opcode) {
         case ROR:
@@ -74,6 +99,20 @@ static inline void add_random_math(uint8_t* &p, const V4_Instruction* code, int 
     }
 }
 
+void wow_compile_code(const V4_Instruction* code, int code_size, void* machine_code, xmrig::Assembly ASM)
+{
+    uint8_t* p0 = reinterpret_cast<uint8_t*>(machine_code);
+    uint8_t* p = p0;
+
+    add_code(p, CryptonightWOW_template_part1, CryptonightWOW_template_part2);
+    add_random_math(p, code, code_size, instructions, instructions_mov, false, ASM);
+    add_code(p, CryptonightWOW_template_part2, CryptonightWOW_template_part3);
+    *(int*)(p - 4) = static_cast<int>((((const uint8_t*)CryptonightWOW_template_mainloop) - ((const uint8_t*)CryptonightWOW_template_part1)) - (p - p0));
+    add_code(p, CryptonightWOW_template_part3, CryptonightWOW_template_end);
+
+    Mem::flushInstructionCache(machine_code, p - p0);
+}
+
 void v4_compile_code(const V4_Instruction* code, int code_size, void* machine_code, xmrig::Assembly ASM)
 {
     uint8_t* p0 = reinterpret_cast<uint8_t*>(machine_code);
@@ -84,6 +123,22 @@ void v4_compile_code(const V4_Instruction* code, int code_size, void* machine_co
     add_code(p, CryptonightR_template_part2, CryptonightR_template_part3);
     *(int*)(p - 4) = static_cast<int>((((const uint8_t*)CryptonightR_template_mainloop) - ((const uint8_t*)CryptonightR_template_part1)) - (p - p0));
     add_code(p, CryptonightR_template_part3, CryptonightR_template_end);
+
+    Mem::flushInstructionCache(machine_code, p - p0);
+}
+
+void wow_compile_code_double(const V4_Instruction* code, int code_size, void* machine_code, xmrig::Assembly ASM)
+{
+    uint8_t* p0 = reinterpret_cast<uint8_t*>(machine_code);
+    uint8_t* p = p0;
+
+    add_code(p, CryptonightWOW_template_double_part1, CryptonightWOW_template_double_part2);
+    add_random_math(p, code, code_size, instructions, instructions_mov, false, ASM);
+    add_code(p, CryptonightWOW_template_double_part2, CryptonightWOW_template_double_part3);
+    add_random_math(p, code, code_size, instructions, instructions_mov, false, ASM);
+    add_code(p, CryptonightWOW_template_double_part3, CryptonightWOW_template_double_part4);
+    *(int*)(p - 4) = static_cast<int>((((const uint8_t*)CryptonightWOW_template_double_mainloop) - ((const uint8_t*)CryptonightWOW_template_double_part1)) - (p - p0));
+    add_code(p, CryptonightWOW_template_double_part4, CryptonightWOW_template_double_end);
 
     Mem::flushInstructionCache(machine_code, p - p0);
 }
