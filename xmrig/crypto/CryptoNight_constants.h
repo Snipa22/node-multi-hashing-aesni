@@ -42,6 +42,7 @@ constexpr const uint32_t CRYPTONIGHT_MASK         = 0x1FFFF0;
 constexpr const uint32_t CRYPTONIGHT_ITER         = 0x80000;
 constexpr const uint32_t CRYPTONIGHT_HALF_ITER    = 0x40000;
 constexpr const uint32_t CRYPTONIGHT_XAO_ITER     = 0x100000;
+constexpr const uint32_t CRYPTONIGHT_WALTZ_ITER   = 0x60000;
 
 constexpr const uint32_t CRYPTONIGHT_GPU_ITER     = 0xC000;
 constexpr const uint32_t CRYPTONIGHT_GPU_MASK     = 0x1FFFC0;
@@ -133,6 +134,8 @@ template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_MSR>() 
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_XAO>()        { return CRYPTONIGHT_XAO_ITER; }
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_RTO>()        { return CRYPTONIGHT_ITER; }
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_GPU>()        { return CRYPTONIGHT_GPU_ITER; }
+template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_WALTZ>()      { return CRYPTONIGHT_WALTZ_ITER; }
+template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT, VARIANT_RWZ>()        { return CRYPTONIGHT_WALTZ_ITER; }
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT_LITE, VARIANT_0>()     { return CRYPTONIGHT_LITE_ITER; }
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT_LITE, VARIANT_1>()     { return CRYPTONIGHT_LITE_ITER; }
 template<> inline constexpr uint32_t cn_select_iter<CRYPTONIGHT_HEAVY, VARIANT_0>()    { return CRYPTONIGHT_HEAVY_ITER; }
@@ -156,6 +159,10 @@ inline uint32_t cn_select_iter(Algo algorithm, Variant variant)
 
     case VARIANT_TRTL:
         return CRYPTONIGHT_TRTL_ITER;
+
+    case VARIANT_WALTZ:
+    case VARIANT_RWZ:
+        return CRYPTONIGHT_WALTZ_ITER;
 
     default:
         break;
@@ -194,6 +201,8 @@ template<> inline constexpr Variant cn_base_variant<VARIANT_HALF>()  { return VA
 template<> inline constexpr Variant cn_base_variant<VARIANT_TRTL>()  { return VARIANT_2; }
 template<> inline constexpr Variant cn_base_variant<VARIANT_GPU>()   { return VARIANT_GPU; }
 template<> inline constexpr Variant cn_base_variant<VARIANT_WOW>()   { return VARIANT_2; }
+template<> inline constexpr Variant cn_base_variant<VARIANT_WALTZ>() { return VARIANT_2; }
+template<> inline constexpr Variant cn_base_variant<VARIANT_RWZ>()   { return VARIANT_2; }
 
 
 } /* namespace xmrig */
