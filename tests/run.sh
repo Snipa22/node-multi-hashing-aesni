@@ -12,6 +12,7 @@ node test_async_heavy.js
 node test_async_pico.js
 node test_sync-1.js
 node test_sync-2.js
+node test_sync-4.js
 node test_sync-half.js
 node test_sync-wow.js
 node test_sync-xtl.js
