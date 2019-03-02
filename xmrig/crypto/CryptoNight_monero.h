@@ -85,9 +85,13 @@
 
 #   define VARIANT2_SHUFFLE(base_ptr, offset, _a, _b, _b1, _c) \
     do { \
-        const __m128i chunk1 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10))); \
-        const __m128i chunk2 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20))); \
-        const __m128i chunk3 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        __m128i chunk1 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10))); \
+        __m128i chunk2 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20))); \
+        __m128i chunk3 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        if (VARIANT == xmrig::VARIANT_RWZ) { \
+            chunk3 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10))); \
+            chunk1 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        } \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10)), _mm_add_epi64(chunk3, _b1)); \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20)), _mm_add_epi64(chunk1, _b)); \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30)), _mm_add_epi64(chunk2, _a)); \
@@ -98,11 +102,15 @@
 
 #   define VARIANT2_SHUFFLE2(base_ptr, offset, _a, _b, _b1, hi, lo) \
     do { \
-        const __m128i chunk1 = _mm_xor_si128(_mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10))), _mm_set_epi64x(lo, hi)); \
-        const __m128i chunk2 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20))); \
+        __m128i chunk1 = _mm_xor_si128(_mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10))), _mm_set_epi64x(lo, hi)); \
+        __m128i chunk2 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20))); \
         hi ^= ((uint64_t*)((base_ptr) + ((offset) ^ 0x20)))[0]; \
         lo ^= ((uint64_t*)((base_ptr) + ((offset) ^ 0x20)))[1]; \
-        const __m128i chunk3 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        __m128i chunk3 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        if (VARIANT == xmrig::VARIANT_RWZ) { \
+            chunk3 = chunk1; \
+            chunk1 = _mm_load_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30))); \
+        } \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x10)), _mm_add_epi64(chunk3, _b1)); \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x20)), _mm_add_epi64(chunk1, _b)); \
         _mm_store_si128((__m128i *)((base_ptr) + ((offset) ^ 0x30)), _mm_add_epi64(chunk2, _a)); \
@@ -130,9 +138,13 @@
 
 #   define VARIANT2_SHUFFLE(base_ptr, offset, _a, _b, _b1, _c) \
     do { \
-        const uint64x2_t chunk1 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10))); \
-        const uint64x2_t chunk2 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20))); \
-        const uint64x2_t chunk3 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        uint64x2_t chunk1 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10))); \
+        uint64x2_t chunk2 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20))); \
+        uint64x2_t chunk3 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        if (VARIANT == xmrig::VARIANT_RWZ) { \
+            chunk3 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10))); \
+            chunk1 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        } \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10)), vaddq_u64(chunk3, vreinterpretq_u64_u8(_b1))); \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20)), vaddq_u64(chunk1, vreinterpretq_u64_u8(_b))); \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30)), vaddq_u64(chunk2, vreinterpretq_u64_u8(_a))); \
@@ -143,11 +155,15 @@
 
 #   define VARIANT2_SHUFFLE2(base_ptr, offset, _a, _b, _b1, hi, lo) \
     do { \
-        const uint64x2_t chunk1 = veorq_u64(vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10))), vcombine_u64(vcreate_u64(hi), vcreate_u64(lo))); \
-        const uint64x2_t chunk2 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20))); \
+        uint64x2_t chunk1 = veorq_u64(vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10))), vcombine_u64(vcreate_u64(hi), vcreate_u64(lo))); \
+        uint64x2_t chunk2 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20))); \
         hi ^= ((uint64_t*)((base_ptr) + ((offset) ^ 0x20)))[0]; \
         lo ^= ((uint64_t*)((base_ptr) + ((offset) ^ 0x20)))[1]; \
-        const uint64x2_t chunk3 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        uint64x2_t chunk3 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        if (VARIANT == xmrig::VARIANT_RWZ) { \
+            chunk3 = chunk1; \
+            chunk1 = vld1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30))); \
+        } \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x10)), vaddq_u64(chunk3, vreinterpretq_u64_u8(_b1))); \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x20)), vaddq_u64(chunk1, vreinterpretq_u64_u8(_b))); \
         vst1q_u64((uint64_t*)((base_ptr) + ((offset) ^ 0x30)), vaddq_u64(chunk2, vreinterpretq_u64_u8(_a))); \

@@ -20,6 +20,8 @@ node test_sync-msr.js
 node test_sync-xao.js
 node test_sync-rto.js
 node test_sync-gpu.js
+node test_sync-waltz.js
+node test_sync-rwz.js
 node test_sync.js
 node test_sync_light.js
 node test_sync_light-1.js
@@ -33,3 +35,5 @@ node test_perf_heavy.js
 node test_perf_gpu.js
 node test_perf_wow.js
 node test_perf_pico.js
+node test_perf_waltz.js
+node test_perf_rwz.js
