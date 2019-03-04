@@ -9,7 +9,7 @@ let lr = lineReader.createInterface({
 });
 lr.on('line', function (line) {
      let line_data = line.split(/ (.+)/);
-     let result = multiHashing.cryptonight(Buffer.from(line_data[1], 'hex'), 15).toString('hex');
+     let result = multiHashing.cryptonight(Buffer.from(line_data[1], 'hex'), 14).toString('hex');
      if (line_data[0] !== result){
          console.error(line_data[1] + ": " + result);
          testsFailed += 1;
