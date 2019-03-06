@@ -80,6 +80,16 @@ xmrig::CpuThread::cn_mainloop_fun        cn_trtl_mainloop_ryzen_asm             
 xmrig::CpuThread::cn_mainloop_fun        cn_trtl_mainloop_bulldozer_asm          = nullptr;
 xmrig::CpuThread::cn_mainloop_double_fun cn_trtl_double_mainloop_sandybridge_asm = nullptr;
 
+xmrig::CpuThread::cn_mainloop_fun        cn_zls_mainloop_ivybridge_asm              = nullptr;
+xmrig::CpuThread::cn_mainloop_fun        cn_zls_mainloop_ryzen_asm                  = nullptr;
+xmrig::CpuThread::cn_mainloop_fun        cn_zls_mainloop_bulldozer_asm              = nullptr;
+xmrig::CpuThread::cn_mainloop_double_fun cn_zls_double_mainloop_sandybridge_asm     = nullptr;
+
+xmrig::CpuThread::cn_mainloop_fun        cn_double_mainloop_ivybridge_asm           = nullptr;
+xmrig::CpuThread::cn_mainloop_fun        cn_double_mainloop_ryzen_asm               = nullptr;
+xmrig::CpuThread::cn_mainloop_fun        cn_double_mainloop_bulldozer_asm           = nullptr;
+xmrig::CpuThread::cn_mainloop_double_fun cn_double_double_mainloop_sandybridge_asm  = nullptr;
+
 void xmrig::CpuThread::patchAsmVariants()
 {
     const int allocation_size = 65536;
