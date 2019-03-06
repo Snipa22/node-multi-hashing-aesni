@@ -5,7 +5,7 @@ let lineReader = require('readline');
 
 let testsFailed = 0, testsPassed = 0;
 let lr = lineReader.createInterface({
-     input: fs.createReadStream('cryptonight-4.txt')
+     input: fs.createReadStream('cryptonight-r.txt')
 });
 lr.on('line', function (line) {
      let line_data = line.split(/ (.+)/);
@@ -19,8 +19,8 @@ lr.on('line', function (line) {
 });
 lr.on('close', function(){
     if (testsFailed > 0){
-        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight-4');
+        console.log(testsFailed + '/' + (testsPassed + testsFailed) + ' tests failed on: cryptonight-r');
     } else {
-        console.log(testsPassed + ' tests passed on: cryptonight-4');
+        console.log(testsPassed + ' tests passed on: cryptonight-r');
     }
 });
