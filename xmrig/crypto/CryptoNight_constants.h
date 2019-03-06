@@ -214,7 +214,6 @@ template<> inline constexpr Variant cn_base_variant<VARIANT_RWZ>()    { return V
 template<> inline constexpr Variant cn_base_variant<VARIANT_ZLS>()    { return VARIANT_2; }
 template<> inline constexpr Variant cn_base_variant<VARIANT_DOUBLE>() { return VARIANT_2; }
 
-
 template<Variant variant> inline constexpr bool cn_is_cryptonight_r() { return false; }
 template<> inline constexpr bool cn_is_cryptonight_r<VARIANT_WOW>()   { return true; }
 template<> inline constexpr bool cn_is_cryptonight_r<VARIANT_4>()     { return true; }
