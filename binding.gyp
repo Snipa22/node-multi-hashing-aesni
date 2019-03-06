@@ -5,6 +5,7 @@
             "sources": [
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/cn_main_loop.S" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/asm/CryptonightR_template.S" || echo)',
+                '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/CryptonightR_gen.cpp" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && (grep avx2 /proc/cpuinfo >/dev/null && echo "xmrig/crypto/cn_gpu_avx.cpp" || echo) || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/cn_gpu_ssse3.cpp" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null || echo "xmrig/crypto/cn_gpu_arm.cpp" || echo)',
@@ -19,7 +20,6 @@
                 "xmrig/crypto/c_groestl.c",
                 "xmrig/crypto/c_jh.c",
                 "xmrig/crypto/c_skein.c",
-                "xmrig/crypto/CryptonightR_gen.cpp",
                 "xmrig/common/crypto/keccak.cpp"
             ],
             "include_dirs": [
