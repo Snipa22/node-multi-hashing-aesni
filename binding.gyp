@@ -36,7 +36,8 @@
                 '<!@(uname -a | grep "aarch64" >/dev/null && echo "-march=armv8-a+crypto -flax-vector-conversions -DXMRIG_ARM=1" || (uname -a | grep "armv7" >/dev/null && echo "-mfpu=neon -flax-vector-conversions -DXMRIG_ARM=1" || echo "-march=native"))',
                 '<!@(grep Intel /proc/cpuinfo >/dev/null && echo -DCPU_INTEL || (grep AMD /proc/cpuinfo >/dev/null && (test `awk \'/cpu family/ && $NF~/^[0-9]*$/ {print $NF}\' /proc/cpuinfo | head -n1` -ge 23 && echo -DAMD || echo -DAMD_OLD) || echo))>',
                 "-std=gnu++11 -s -fPIC -DNDEBUG -Ofast -fno-fast-math -fno-exceptions -fno-rtti -Wno-class-memaccess"
-            ]
+            ],
+            "libraries": [ "../RandomWOW/bin/librandomx.a" ]
         }
     ]
 }
