@@ -1,0 +1,25 @@
+{
+    "name": "cryptonight-hashing",
+    "version": "9.0.2",
+    "main": "cryptonight-hashing",
+    "author": {
+        "name": "Multiple",
+        "email": "Check The Git Repo"
+    },
+    "license": "GPL-3.0-or-later",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/MoneroOcean/node-cryptonight-hashing.git"
+    },
+    "dependencies": {
+        "bindings": "*",
+        "nan":      "^2.8.0"
+    },
+    "keywords": [
+        "cryptonight",
+        "cryptonote",
+        "forknote",
+        "bytecoin",
+        "monero"
+    ]
+}
