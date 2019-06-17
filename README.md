@@ -15,15 +15,11 @@ Algorithms
 Installing locally and testing
 -----
 ```
-git clone --recursive https://github.com/SChernykh/node-cryptonight-hashing/
-cd node-cryptonight-hashing
-git checkout random_wow
-git pull --recurse-submodules
-cd RandomWOW && make && cd ..
-npm install
-node tests/test_random_wow.js
+npm install https://github.com/MoneroOcean/node-cryptonight-hashing
+node_modules/cryptonight-hashing/tests/run.sh
 ```
 
 Credits
 -------
 * [XMrig](https://github.com/xmrig) - For advanced cryptonight implementations from [XMrig](https://github.com/xmrig/xmrig)
+* [SChernykh](https://github.com/SChernykh) - For PoW development and its integration help

@@ -98,7 +98,6 @@ NAN_METHOD(random_wow) {
 
     char output[32];
     randomx_calculate_hash(rx_vm, reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output));
-    //randomx_calculate_hash(rx_vm, "This is a test", sizeof("This is a test") - 1, reinterpret_cast<uint8_t*>(output));
 
     v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
     info.GetReturnValue().Set(returnValue);
