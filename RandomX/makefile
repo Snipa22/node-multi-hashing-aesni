@@ -2,8 +2,8 @@
 #CC=gcc-8
 AR=gcc-ar
 PLATFORM=$(shell uname -m)
-CXXFLAGS=-std=c++11
-CCFLAGS=-std=c99
+CXXFLAGS=-std=c++11 -fPIC
+CCFLAGS=-std=c99 -fPIC
 ARFLAGS=rcs
 BINDIR=bin
 SRCDIR=src
