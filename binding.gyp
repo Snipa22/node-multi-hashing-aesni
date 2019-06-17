@@ -31,7 +31,7 @@
                 "RandomWOW/src/allocator.cpp",
                 "RandomWOW/src/assembly_generator_x86.cpp",
                 "RandomWOW/src/instruction.cpp",
-                "RandomWOW/src/RandomX.cpp",
+                "RandomWOW/src/Randomx.cpp",
                 "RandomWOW/src/superscalar.cpp",
                 "RandomWOW/src/vm_compiled.cpp",
                 "RandomWOW/src/vm_interpreted_light.cpp",
