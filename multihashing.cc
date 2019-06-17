@@ -19,6 +19,8 @@
 
 #include "xmrig/Mem.h"
 
+#include "RandomWOW/src/randomx.h"
+
 #if (defined(__AES__) && (__AES__ == 1)) || (defined(__ARM_FEATURE_CRYPTO) && (__ARM_FEATURE_CRYPTO == 1))
 #define SOFT_AES false
 #else
@@ -26,11 +28,50 @@
 #define SOFT_AES true
 #endif
 
-static struct cryptonight_ctx* ctx = NULL;
+static struct cryptonight_ctx* ctx = nullptr;
+static randomx_cache* rx_cache = nullptr;
+static randomx_vm* rx_vm = nullptr;
+static uint8_t rx_seed_hash[32] = {};
 
 void init_ctx() {
     if (ctx) return;
     Mem::create(&ctx, xmrig::CRYPTONIGHT_HEAVY, 1);
+}
+
+void init_rx(const uint8_t* seed_hash_data) {
+    if (!rx_cache) {
+        rx_cache = randomx_alloc_cache(static_cast<randomx_flags>(RANDOMX_FLAG_JIT | RANDOMX_FLAG_LARGE_PAGES));
+        if (!rx_cache) {
+            rx_cache = randomx_alloc_cache(RANDOMX_FLAG_JIT);
+        }
+        memcpy(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash));
+        randomx_init_cache(rx_cache, rx_seed_hash, sizeof(rx_seed_hash));
+        if (rx_vm) {
+            randomx_vm_set_cache(rx_vm, rx_cache);
+        }
+    }
+    else {
+        // Check if we need to update cache
+        if (memcmp(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash)) != 0) {
+            memcpy(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash));
+            randomx_init_cache(rx_cache, rx_seed_hash, sizeof(rx_seed_hash));
+            if (rx_vm) {
+                randomx_vm_set_cache(rx_vm, rx_cache);
+            }
+        }
+    }
+
+    if (!rx_vm) {
+        int flags = RANDOMX_FLAG_LARGE_PAGES | RANDOMX_FLAG_JIT;
+#if !SOFT_AES
+        flags |= RANDOMX_FLAG_HARD_AES;
+#endif
+
+        rx_vm = randomx_create_vm(static_cast<randomx_flags>(flags), rx_cache, nullptr);
+        if (!rx_vm) {
+            rx_vm = randomx_create_vm(static_cast<randomx_flags>(flags - RANDOMX_FLAG_LARGE_PAGES), rx_cache, nullptr);
+        }
+    }
 }
 
 #define THROW_ERROR_EXCEPTION(x) Nan::ThrowError(x)
@@ -42,6 +83,26 @@ void callback(char* data, void* hint) {
 using namespace node;
 using namespace v8;
 using namespace Nan;
+
+NAN_METHOD(random_wow) {
+    if (info.Length() < 2) return THROW_ERROR_EXCEPTION("You must provide two arguments.");
+
+    Local<Object> target = info[0]->ToObject();
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 1 should be a buffer object.");
+
+    Local<Object> seed_hash = info[1]->ToObject();
+    if (!Buffer::HasInstance(seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 should be a buffer object.");
+    if (Buffer::Length(seed_hash) != sizeof(rx_seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 size should be 32 bytes.");
+
+    init_rx(reinterpret_cast<const uint8_t*>(Buffer::Data(seed_hash)));
+
+    char output[32];
+    randomx_calculate_hash(rx_vm, reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output));
+    //randomx_calculate_hash(rx_vm, "This is a test", sizeof("This is a test") - 1, reinterpret_cast<uint8_t*>(output));
+
+    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
+    info.GetReturnValue().Set(returnValue);
+}
 
 NAN_METHOD(cryptonight) {
     if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
@@ -684,6 +745,7 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight_heavy_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_heavy_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_pico").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_pico_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico_async)).ToLocalChecked());
+    Nan::Set(target, Nan::New("random_wow").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(random_wow)).ToLocalChecked());
 }
 
 NODE_MODULE(cryptonight, init)
