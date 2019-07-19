@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "bindings": "*",
-        "nan":      "^2.8.0"
+        "nan": "^2.8.0"
     },
     "keywords": [
         "cryptonight",

@@ -19,7 +19,7 @@
 
 #include "xmrig/Mem.h"
 
-#include "RandomWOW/src/randomx.h"
+#include "xmrig/crypto/randomx/randomx.h"
 
 #if (defined(__AES__) && (__AES__ == 1)) || (defined(__ARM_FEATURE_CRYPTO) && (__ARM_FEATURE_CRYPTO == 1))
 #define SOFT_AES false
@@ -31,6 +31,7 @@
 static struct cryptonight_ctx* ctx = nullptr;
 static randomx_cache* rx_cache = nullptr;
 static randomx_vm* rx_vm = nullptr;
+static xmrig::Variant rx_variant = xmrig::VARIANT_MAX;
 static uint8_t rx_seed_hash[32] = {};
 
 void init_ctx() {
@@ -38,26 +39,42 @@ void init_ctx() {
     Mem::create(&ctx, xmrig::CRYPTONIGHT_HEAVY, 1);
 }
 
-void init_rx(const uint8_t* seed_hash_data) {
+void init_rx(const uint8_t* seed_hash_data, xmrig::Variant variant) {
+    bool update_cache = false;
     if (!rx_cache) {
         rx_cache = randomx_alloc_cache(static_cast<randomx_flags>(RANDOMX_FLAG_JIT | RANDOMX_FLAG_LARGE_PAGES));
         if (!rx_cache) {
             rx_cache = randomx_alloc_cache(RANDOMX_FLAG_JIT);
         }
+        update_cache = true;
+    }
+    else if (memcmp(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash)) != 0) {
+        update_cache = true;
+    }
+
+    if (variant != rx_variant) {
+        switch (variant) {
+            case xmrig::VARIANT_0:
+                randomx_apply_config(RandomX_MoneroConfig);
+                break;
+            case xmrig::VARIANT_RX_WOW:
+                randomx_apply_config(RandomX_WowneroConfig);
+                break;
+            case xmrig::VARIANT_RX_LOKI:
+                randomx_apply_config(RandomX_LokiConfig);
+                break;
+            default:
+                throw std::domain_error("Unknown RandomX variant");
+        }
+        rx_variant = variant;
+        update_cache = true;
+    }
+
+    if (update_cache) {
         memcpy(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash));
         randomx_init_cache(rx_cache, rx_seed_hash, sizeof(rx_seed_hash));
         if (rx_vm) {
             randomx_vm_set_cache(rx_vm, rx_cache);
-        }
-    }
-    else {
-        // Check if we need to update cache
-        if (memcmp(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash)) != 0) {
-            memcpy(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash));
-            randomx_init_cache(rx_cache, rx_seed_hash, sizeof(rx_seed_hash));
-            if (rx_vm) {
-                randomx_vm_set_cache(rx_vm, rx_cache);
-            }
         }
     }
 
@@ -84,7 +101,7 @@ using namespace node;
 using namespace v8;
 using namespace Nan;
 
-NAN_METHOD(random_wow) {
+NAN_METHOD(randomx) {
     if (info.Length() < 2) return THROW_ERROR_EXCEPTION("You must provide two arguments.");
 
     Local<Object> target = info[0]->ToObject();
@@ -94,7 +111,17 @@ NAN_METHOD(random_wow) {
     if (!Buffer::HasInstance(seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 should be a buffer object.");
     if (Buffer::Length(seed_hash) != sizeof(rx_seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 size should be 32 bytes.");
 
-    init_rx(reinterpret_cast<const uint8_t*>(Buffer::Data(seed_hash)));
+    int variant = 0;
+    if (info.Length() >= 3) {
+        if (!info[2]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 3 should be a number");
+        variant = Nan::To<int>(info[2]).FromMaybe(0);
+    }
+
+    try {
+        init_rx(reinterpret_cast<const uint8_t*>(Buffer::Data(seed_hash)), static_cast<xmrig::Variant>(variant));
+    } catch (const std::domain_error &e) {
+        return THROW_ERROR_EXCEPTION(e.what());
+    }
 
     char output[32];
     randomx_calculate_hash(rx_vm, reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output));
@@ -744,7 +771,7 @@ NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight_heavy_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_heavy_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_pico").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_pico_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico_async)).ToLocalChecked());
-    Nan::Set(target, Nan::New("random_wow").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(random_wow)).ToLocalChecked());
+    Nan::Set(target, Nan::New("randomx").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(randomx)).ToLocalChecked());
 }
 
 NODE_MODULE(cryptonight, init)
