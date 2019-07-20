@@ -48,7 +48,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Variant variant) {
         }
         update_cache = true;
     }
-    else if (memcmp(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash)) != 0) {
+    else if (memcmp(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash[0])) != 0) {
         update_cache = true;
     }
 
@@ -71,8 +71,8 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Variant variant) {
     //}
 
     if (update_cache) {
-        memcpy(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash));
-        randomx_init_cache(rx_cache[variant], rx_seed_hash[variant], sizeof(rx_seed_hash));
+        memcpy(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash[0]));
+        randomx_init_cache(rx_cache[variant], rx_seed_hash[variant], sizeof(rx_seed_hash[0]));
         if (rx_vm[variant]) {
             randomx_vm_set_cache(rx_vm[variant], rx_cache[variant]);
         }
@@ -109,7 +109,7 @@ NAN_METHOD(randomx) {
 
     Local<Object> seed_hash = info[1]->ToObject();
     if (!Buffer::HasInstance(seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 should be a buffer object.");
-    if (Buffer::Length(seed_hash) != sizeof(rx_seed_hash)) return THROW_ERROR_EXCEPTION("Argument 2 size should be 32 bytes.");
+    if (Buffer::Length(seed_hash) != sizeof(rx_seed_hash[0])) return THROW_ERROR_EXCEPTION("Argument 2 size should be 32 bytes.");
 
     int variant = 0;
     if (info.Length() >= 3) {
