@@ -31,6 +31,7 @@ node test_sync_heavy-xhv.js
 node test_sync_heavy-tube.js
 node test_sync_pico.js
 node test_random_wow.js
+node test_randomx_loki.js
 
 node test_perf.js
 node test_perf_light.js
