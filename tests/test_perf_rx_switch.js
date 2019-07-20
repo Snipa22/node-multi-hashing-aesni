@@ -2,17 +2,17 @@
 let multiHashing = require('../build/Release/cryptonight-hashing');
 
 const ITER = 100;
-let input = Buffer.from("test");
+const seed  = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex');
 
-multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 17);
-multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 18);
-multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 0);
+multiHashing.randomx(Buffer.from("test"), seed, 17);
+multiHashing.randomx(Buffer.from("test"), seed, 18);
+multiHashing.randomx(Buffer.from("test"), seed, 0);
 
 let start = Date.now();
 for (let i = ITER; i; -- i) {
-  multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 17);
-  multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 18);
-  multiHashing.randomx(input, Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 0);
+  multiHashing.randomx(Buffer.from("test" + i), seed, 17);
+  multiHashing.randomx(Buffer.from("test" + i), seed, 18);
+  multiHashing.randomx(Buffer.from("test" + i), seed, 0);
 }
 let end = Date.now();
 console.log("Perf: " + 1000 * ITER * 3 / (end - start) + " H/s");
