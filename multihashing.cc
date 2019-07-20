@@ -32,7 +32,7 @@ static struct cryptonight_ctx* ctx = nullptr;
 static randomx_cache* rx_cache[xmrig::VARIANT_MAX] = {nullptr};
 static randomx_vm* rx_vm[xmrig::VARIANT_MAX] = {nullptr};
 static xmrig::Variant rx_variant = xmrig::VARIANT_MAX;
-static uint8_t rx_seed_hash[32] = {};
+static uint8_t rx_seed_hash[xmrig::VARIANT_MAX][32] = {};
 
 void init_ctx() {
     if (ctx) return;
@@ -48,7 +48,7 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Variant variant) {
         }
         update_cache = true;
     }
-    else if (memcmp(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash)) != 0) {
+    else if (memcmp(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash)) != 0) {
         update_cache = true;
     }
 
@@ -71,8 +71,8 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Variant variant) {
     //}
 
     if (update_cache) {
-        memcpy(rx_seed_hash, seed_hash_data, sizeof(rx_seed_hash));
-        randomx_init_cache(rx_cache[variant], rx_seed_hash, sizeof(rx_seed_hash));
+        memcpy(rx_seed_hash[variant], seed_hash_data, sizeof(rx_seed_hash));
+        randomx_init_cache(rx_cache[variant], rx_seed_hash[variant], sizeof(rx_seed_hash));
         if (rx_vm[variant]) {
             randomx_vm_set_cache(rx_vm[variant], rx_cache[variant]);
         }
