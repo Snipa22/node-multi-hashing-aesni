@@ -36,7 +36,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <cassert>
 
+extern "C" {
 #include "yescrypt.h"
+} 
+
 #include "KangarooTwelve.h"
 
 #define YESCRYPT_FLAGS YESCRYPT_RW
@@ -57,7 +60,6 @@ RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 	ScratchpadL3_Size = 262144;
 	ScratchpadL2_Size = 131072;
 	ScratchpadL1_Size = 65536;
-
 }
 
 RandomX_ConfigurationScala RandomX_ScalaConfig;
