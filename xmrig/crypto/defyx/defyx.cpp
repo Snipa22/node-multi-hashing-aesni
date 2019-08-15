@@ -50,7 +50,7 @@ RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 {
 	ArgonMemory       = 131072;
         ArgonIterations   = 2;
-	ArgonSalt         = "DefyXScala\x13";
+	ArgonSalt         = "DefyX\x03";
         CacheAccesses     = 2;
         DatasetBaseSize   = 33554432;
         ProgramSize       = 64;
@@ -59,6 +59,53 @@ RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 	ScratchpadL3_Size = 262144;
 	ScratchpadL2_Size = 131072;
 	ScratchpadL1_Size = 65536;
+
+	: ArgonMemory(262144)
+	, ArgonIterations(3)
+	, ArgonLanes(1)
+	, ArgonSalt("RandomX\x03")
+	, CacheAccesses(8)
+	, SuperscalarLatency(170)
+	, DatasetBaseSize(2147483648)
+	, DatasetExtraSize(33554368)
+	, ScratchpadL1_Size(16384)
+	, ScratchpadL2_Size(262144)
+	, ScratchpadL3_Size(2097152)
+	, ProgramSize(256)
+	, ProgramIterations(2048)
+	, ProgramCount(8)
+	, JumpBits(8)
+	, JumpOffset(8)
+	, RANDOMX_FREQ_IADD_RS(25)
+	, RANDOMX_FREQ_IADD_M(7)
+	, RANDOMX_FREQ_ISUB_R(16)
+	, RANDOMX_FREQ_ISUB_M(7)
+	, RANDOMX_FREQ_IMUL_R(16)
+	, RANDOMX_FREQ_IMUL_M(4)
+	, RANDOMX_FREQ_IMULH_R(4)
+	, RANDOMX_FREQ_IMULH_M(1)
+	, RANDOMX_FREQ_ISMULH_R(4)
+	, RANDOMX_FREQ_ISMULH_M(1)
+	, RANDOMX_FREQ_IMUL_RCP(8)
+	, RANDOMX_FREQ_INEG_R(2)
+	, RANDOMX_FREQ_IXOR_R(15)
+	, RANDOMX_FREQ_IXOR_M(5)
+	, RANDOMX_FREQ_IROR_R(8)
+	, RANDOMX_FREQ_IROL_R(2)
+	, RANDOMX_FREQ_ISWAP_R(4)
+	, RANDOMX_FREQ_FSWAP_R(4)
+	, RANDOMX_FREQ_FADD_R(16)
+	, RANDOMX_FREQ_FADD_M(5)
+	, RANDOMX_FREQ_FSUB_R(16)
+	, RANDOMX_FREQ_FSUB_M(5)
+	, RANDOMX_FREQ_FSCAL_R(6)
+	, RANDOMX_FREQ_FMUL_R(32)
+	, RANDOMX_FREQ_FDIV_M(4)
+	, RANDOMX_FREQ_FSQRT_R(6)
+	, RANDOMX_FREQ_CBRANCH(16)
+	, RANDOMX_FREQ_CFROUND(1)
+	, RANDOMX_FREQ_ISTORE(16)
+	, RANDOMX_FREQ_NOP(0)
 }
 
 RandomX_ConfigurationScala RandomX_ScalaConfig;
