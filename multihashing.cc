@@ -10,8 +10,9 @@
 //#define _mm_aesenc_si128(a, b) a
 //#endif
 
+#include "crypto/common/VirtualMemory.h"
 #include "crypto/cn/CnCtx.h" 
-#include "crypto/cn/CnHash.h" 
+#include "crypto/cn/CnHash.h"
 #include "crypto/randomx/randomx.h"
 
 #if (defined(__AES__) && (__AES__ == 1)) || (defined(__ARM_FEATURE_CRYPTO) && (__ARM_FEATURE_CRYPTO == 1))
