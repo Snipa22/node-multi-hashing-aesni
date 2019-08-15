@@ -44,6 +44,8 @@
 
                 "xmrig/crypto/defyx/defyx.cpp",
                 "xmrig/crypto/defyx/KangarooTwelve.c",
+                "xmrig/crypto/defyx/KeccakP-1600-reference.c",
+                "xmrig/crypto/defyx/KeccakSpongeWidth1600.c",
                 "xmrig/crypto/defyx/yescrypt-best.c",
                 "xmrig/crypto/defyx/sha256.c",
             ],
