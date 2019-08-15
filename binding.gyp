@@ -45,6 +45,7 @@
                 "xmrig/crypto/defyx/defyx.cpp",
                 "xmrig/crypto/defyx/KangarooTwelve.c",
                 "xmrig/crypto/defyx/yescrypt-best.c",
+                "xmrig/crypto/defyx/sha256.c",
             ],
             "include_dirs": [
                 "xmrig-override",
