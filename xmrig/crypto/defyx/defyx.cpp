@@ -38,9 +38,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 extern "C" {
 #include "yescrypt.h"
-} 
-
 #include "KangarooTwelve.h"
+} 
 
 #define YESCRYPT_FLAGS YESCRYPT_RW
 #define YESCRYPT_BASE_N 2048
