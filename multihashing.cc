@@ -40,7 +40,8 @@
   #define FNA(algo) xmrig::CnHash::fn(xmrig::Algorithm::algo, SOFT_AES ? xmrig::CnHash::AV_SINGLE_SOFT : xmrig::CnHash::AV_SINGLE, xmrig::Assembly::NONE)
 #endif
 
-static uint8_t* scratchpad = nullptr;
+const size_t max_mem_size = 4 * 1024 * 1024;
+xmrig::VirtualMemory mem(max_mem_size, true, 4096);
 static struct cryptonight_ctx* ctx = nullptr;
 static randomx_cache* rx_cache[xmrig::Algorithm::Id::MAX] = {nullptr};
 static randomx_vm* rx_vm[xmrig::Algorithm::Id::MAX] = {nullptr};
@@ -49,9 +50,7 @@ static uint8_t rx_seed_hash[xmrig::Algorithm::Id::MAX][32] = {};
 
 struct InitCtx {
     InitCtx() {
-        const size_t size = 4 * 1024 * 1024;
-        scratchpad = static_cast<uint8_t *>(_mm_malloc(size, 4096));
-        xmrig::CnCtx::create(&ctx, scratchpad, size, 1);
+        xmrig::CnCtx::create(&ctx, mem.scratchpad(), max_mem_size, 1);
     }
 } s;
 
@@ -100,9 +99,9 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
         flags |= RANDOMX_FLAG_HARD_AES;
 #endif
 
-        rx_vm[algo] = randomx_create_vm(static_cast<randomx_flags>(flags), rx_cache[algo], nullptr, scratchpad);
+        rx_vm[algo] = randomx_create_vm(static_cast<randomx_flags>(flags), rx_cache[algo], nullptr, mem.scratchpad());
         if (!rx_vm[algo]) {
-            rx_vm[algo] = randomx_create_vm(static_cast<randomx_flags>(flags - RANDOMX_FLAG_LARGE_PAGES), rx_cache[algo], nullptr, scratchpad);
+            rx_vm[algo] = randomx_create_vm(static_cast<randomx_flags>(flags - RANDOMX_FLAG_LARGE_PAGES), rx_cache[algo], nullptr, mem.scratchpad());
         }
     }
 }
