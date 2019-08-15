@@ -41,6 +41,10 @@
                 "xmrig/crypto/randomx/blake2/blake2b.c",
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86_static.S" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86.cpp" || echo)',
+
+                "xmrig/crypto/defyx/defyx.cpp",
+                "xmrig/crypto/defyx/KangarooTwelve.c",
+                "xmrig/crypto/defyx/yescrypt-best.c",
             ],
             "include_dirs": [
                 "xmrig-override",
