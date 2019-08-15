@@ -69,7 +69,7 @@ int sipesh(void *out, size_t outlen, const void *in, size_t inlen, const void *s
 		return -1;
 	retval = yescrypt_kdf(NULL, &local, (const uint8_t*)in, inlen, (const uint8_t*)salt, saltlen,
 	    (uint64_t)YESCRYPT_BASE_N << m_cost, YESCRYPT_R, YESCRYPT_P,
-	    t_cost, 0, YESCRYPT_FLAGS, (const uint8_t*)out, outlen);
+	    t_cost, 0, YESCRYPT_FLAGS, (uint8_t*)out, outlen);
 	if (yescrypt_free_local(&local))
 		return -1;
 	return retval;
