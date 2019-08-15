@@ -146,6 +146,7 @@ NAN_METHOD(randomx) {
     char output[32];
     switch (algo) {
       case 1:  defyx_calculate_hash  (rx_vm[algo], reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output));
+               break;
       default: randomx_calculate_hash(rx_vm[algo], reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output));
     }
 
