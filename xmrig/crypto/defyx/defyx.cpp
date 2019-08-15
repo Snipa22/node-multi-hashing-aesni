@@ -27,7 +27,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "defyx.h"
-#include "crypto/common/randomx/blake2/blake2.h"
+#include "crypto/randomx/blake2/blake2.h"
 
 #include "yescrypt.h"
 #include "KangarooTwelve.h"
