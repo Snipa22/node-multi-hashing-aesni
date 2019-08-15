@@ -28,6 +28,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "defyx.h"
 #include "crypto/randomx/blake2/blake2.h"
+#include "crypto/randomx/vm_interpreted.hpp"
+#include "crypto/randomx/vm_interpreted_light.hpp"
+#include "crypto/randomx/vm_compiled.hpp"
+#include "crypto/randomx/vm_compiled_light.hpp"
+#include "crypto/randomx/jit_compiler_x86_static.hpp"
 
 #include <cassert>
 
@@ -62,9 +67,9 @@ int sipesh(void *out, size_t outlen, const void *in, size_t inlen, const void *s
 
 	if (yescrypt_init_local(&local))
 		return -1;
-	retval = yescrypt_kdf(NULL, &local, in, inlen, salt, saltlen,
+	retval = yescrypt_kdf(NULL, &local, (const uint8_t*)in, inlen, (const uint8_t*)salt, saltlen,
 	    (uint64_t)YESCRYPT_BASE_N << m_cost, YESCRYPT_R, YESCRYPT_P,
-	    t_cost, 0, YESCRYPT_FLAGS, out, outlen);
+	    t_cost, 0, YESCRYPT_FLAGS, (const uint8_t*)out, outlen);
 	if (yescrypt_free_local(&local))
 		return -1;
 	return retval;
