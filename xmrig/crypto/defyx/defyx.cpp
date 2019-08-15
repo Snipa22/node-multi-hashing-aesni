@@ -29,8 +29,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "defyx.h"
 #include "crypto/randomx/blake2/blake2.h"
 
+#include <cassert>
+
 #include "yescrypt.h"
 #include "KangarooTwelve.h"
+
+#define YESCRYPT_FLAGS YESCRYPT_RW
+#define YESCRYPT_BASE_N 2048
+#define YESCRYPT_R 8
+#define YESCRYPT_P 1
 
 RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 {
