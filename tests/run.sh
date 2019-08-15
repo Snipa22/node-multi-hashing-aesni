@@ -32,6 +32,7 @@ node test_perf.js
 node test_perf_light.js
 node test_perf_heavy.js
 node test_perf_gpu.js
+node test_perf_rx_defyx.js
 node test_perf_rx_wow.js
 node test_perf_rx_loki.js
 node test_perf_rx_switch.js
