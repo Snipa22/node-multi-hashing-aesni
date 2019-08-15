@@ -27,14 +27,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "defyx.h"
-#include "dataset.hpp"
-#include "vm_interpreted.hpp"
-#include "vm_interpreted_light.hpp"
-#include "vm_compiled.hpp"
-#include "vm_compiled_light.hpp"
-#include "blake2/blake2.h"
-#include "jit_compiler_x86_static.hpp"
-#include <cassert>
+#include "crypto/common/randomx/blake2/blake2.h"
 
 #include "yescrypt.h"
 #include "KangarooTwelve.h"
