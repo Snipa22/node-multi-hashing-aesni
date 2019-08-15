@@ -11,6 +11,7 @@ Algorithms
 * cryptonight-heavy (v0, xhv, tube)
 * cryptonight-pico (trtl)
 * RandomX (Wownero, Loki)
+* DefyX (Scala)
 
 Installing locally and testing
 -----
