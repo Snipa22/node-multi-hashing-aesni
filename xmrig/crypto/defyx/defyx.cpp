@@ -60,6 +60,8 @@ RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 
 }
 
+RandomX_ConfigurationScala RandomX_ScalaConfig;
+
 int sipesh(void *out, size_t outlen, const void *in, size_t inlen, const void *salt, size_t saltlen, unsigned int t_cost, unsigned int m_cost)
 {
 	yescrypt_local_t local;
