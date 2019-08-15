@@ -50,7 +50,7 @@ RandomX_ConfigurationScala::RandomX_ConfigurationScala()
 {
 	ArgonMemory       = 131072;
         ArgonIterations   = 2;
-	ArgonSalt         = "RandomXL\x12";
+	ArgonSalt         = "DefyXScala\x13";
         CacheAccesses     = 2;
         DatasetBaseSize   = 33554432;
         ProgramSize       = 64;
