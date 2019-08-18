@@ -132,6 +132,11 @@ private:
         0,             // RX_0
         0,             // RX_WOW
         0,             // RX_LOKI
+        0,             // DEFYX
+#       endif
+#       ifdef XMRIG_ALGO_ARGON2
+        0,             // AR2_CHUKWA
+        0,             // AR2_WRKZ
 #       endif
     };
 
@@ -167,6 +172,11 @@ private:
         0,             // RX_0
         0,             // RX_WOW
         0,             // RX_LOKI
+        0,             // DEFYX
+#       endif
+#       ifdef XMRIG_ALGO_ARGON2
+        0,             // AR2_CHUKWA
+        0,             // AR2_WRKZ
 #       endif
     };
 
@@ -202,6 +212,11 @@ private:
         Algorithm::INVALID, // RX_0
         Algorithm::INVALID, // RX_WOW
         Algorithm::INVALID, // RX_LOKI
+        Algorithm::INVALID, // DEFYX
+#       endif
+#       ifdef XMRIG_ALGO_ARGON2
+        Algorithm::INVALID, // AR2_CHUKWA
+        Algorithm::INVALID, // AR2_WRKZ
 #       endif
     };
 };

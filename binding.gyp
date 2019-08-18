@@ -42,6 +42,8 @@
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86_static.S" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86.cpp" || echo)',
 
+                "xmrig/crypto/argon2/Impl.cpp",
+
                 "xmrig/crypto/defyx/defyx.cpp",
                 "xmrig/crypto/defyx/KangarooTwelve.c",
                 "xmrig/crypto/defyx/KeccakP-1600-reference.c",
