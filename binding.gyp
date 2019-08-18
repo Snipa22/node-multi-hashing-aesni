@@ -45,7 +45,7 @@
                 "xmrig/3rdparty/argon2/lib/argon2.c",
                 "xmrig/3rdparty/argon2/lib/core.c",
                 "xmrig/3rdparty/argon2/lib/encoding.c",
-                "xmrig/3rdparty/argon2/lib/getkat.c",
+                "xmrig/3rdparty/argon2/lib/genkat.c",
                 "xmrig/3rdparty/argon2/lib/impl-select.c",
                 "xmrig/3rdparty/argon2/lib/blake2/blake2.c",
                 "xmrig/3rdparty/argon2/arch/x86_64/lib/argon2-arch.c",
