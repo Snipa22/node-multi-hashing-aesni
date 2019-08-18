@@ -67,6 +67,7 @@
                 "xmrig-override",
                 "xmrig",
                 "xmrig/3rdparty/argon2/include",
+                "xmrig/3rdparty/argon2/lib",
                 "<!(node -e \"require('nan')\")"
             ],
             "cflags_c": [
