@@ -42,7 +42,6 @@
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86_static.S" || echo)',
                 '<!@(uname -a | grep "x86_64" >/dev/null && echo "xmrig/crypto/randomx/jit_compiler_x86.cpp" || echo)',
 
-                "xmrig/crypto/argon2/Impl.cpp",
                 "xmrig/3rdparty/argon2/lib/argon2.c",
                 "xmrig/3rdparty/argon2/lib/core.c",
                 "xmrig/3rdparty/argon2/lib/encoding.c",
