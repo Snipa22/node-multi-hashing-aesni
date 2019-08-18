@@ -197,6 +197,13 @@ static xmrig::cn_hash_fun get_cn_pico_fn(const int algo) {
     default: return FNA(CN_PICO_0);
   }
 }
+static xmrig::cn_hash_fun get_argon2_fn(const int algo) {
+  switch (algo) {
+    case 0:  return FN(AR2_CHUKWA);
+    case 1:  return FN(AR2_WRKZ);
+    default: return FN(AR2_CHUKWA);
+  }
+}
 
 NAN_METHOD(cryptonight) {
     if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
@@ -301,6 +308,28 @@ NAN_METHOD(cryptonight_pico) {
     }
 
     const xmrig::cn_hash_fun fn = get_cn_pico_fn(algo);
+
+    char output[32];
+    fn(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx, 0);
+
+    v8::Local<v8::Value> returnValue = Nan::CopyBuffer(output, 32).ToLocalChecked();
+    info.GetReturnValue().Set(returnValue);
+}
+
+NAN_METHOD(argon2) {
+    if (info.Length() < 1) return THROW_ERROR_EXCEPTION("You must provide one argument.");
+
+    Local<Object> target = info[0]->ToObject();
+    if (!Buffer::HasInstance(target)) return THROW_ERROR_EXCEPTION("Argument 1 should be a buffer object.");
+
+    int algo = 0;
+
+    if (info.Length() >= 2) {
+        if (!info[1]->IsNumber()) return THROW_ERROR_EXCEPTION("Argument 2 should be a number");
+        algo = Nan::To<int>(info[1]).FromMaybe(0);
+    }
+
+    const xmrig::cn_hash_fun fn = get_argon2_fn(algo);
 
     char output[32];
     fn(reinterpret_cast<const uint8_t*>(Buffer::Data(target)), Buffer::Length(target), reinterpret_cast<uint8_t*>(output), &ctx, 0);
@@ -535,14 +564,16 @@ NAN_METHOD(cryptonight_pico_async) {
 
 NAN_MODULE_INIT(init) {
     Nan::Set(target, Nan::New("cryptonight").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight)).ToLocalChecked());
-    //Nan::Set(target, Nan::New("cryptonight_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_light").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light)).ToLocalChecked());
-    //Nan::Set(target, Nan::New("cryptonight_light_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_heavy").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_heavy)).ToLocalChecked());
-    //Nan::Set(target, Nan::New("cryptonight_heavy_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_heavy_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("cryptonight_pico").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico)).ToLocalChecked());
-    //Nan::Set(target, Nan::New("cryptonight_pico_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico_async)).ToLocalChecked());
     Nan::Set(target, Nan::New("randomx").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(randomx)).ToLocalChecked());
+    Nan::Set(target, Nan::New("argon2").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(argon2)).ToLocalChecked());
+
+    //Nan::Set(target, Nan::New("cryptonight_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_async)).ToLocalChecked());
+    //Nan::Set(target, Nan::New("cryptonight_light_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_light_async)).ToLocalChecked());
+    //Nan::Set(target, Nan::New("cryptonight_heavy_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_heavy_async)).ToLocalChecked());
+    //Nan::Set(target, Nan::New("cryptonight_pico_async").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(cryptonight_pico_async)).ToLocalChecked());
 }
 
 NODE_MODULE(cryptonight, init)
