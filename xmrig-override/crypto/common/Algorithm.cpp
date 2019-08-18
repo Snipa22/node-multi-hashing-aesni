@@ -69,7 +69,14 @@ xmrig::Algorithm::Family xmrig::Algorithm::family(Id id)
     case RX_0:
     case RX_WOW:
     case RX_LOKI:
+    case DEFYX:
         return RANDOM_X;
+#   endif
+
+#   ifdef XMRIG_ALGO_ARGON2
+    case AR2_CHUKWA:
+    case AR2_WRKZ:
+        return ARGON2;
 #   endif
 
     case INVALID:

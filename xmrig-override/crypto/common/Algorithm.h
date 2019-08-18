@@ -32,6 +32,7 @@
 #define XMRIG_ALGO_CN_HEAVY 1
 #define XMRIG_ALGO_CN_PICO  1
 #define XMRIG_ALGO_RANDOMX  1
+#define XMRIG_ALGO_ARGON2   1
 
 
 namespace xmrig {
@@ -73,6 +74,11 @@ public:
         RX_0,          // "rx/0"             RandomX (reference configuration).
         RX_WOW,        // "rx/wow"           RandomWOW (Wownero).
         RX_LOKI,       // "rx/loki"          RandomXL (Loki).
+        DEFYX,         // "defyx"            DefyX (Scala).
+#       endif
+#       ifdef XMRIG_ALGO_ARGON2
+        AR2_CHUKWA,    // "argon2/chukwa"
+        AR2_WRKZ,      // "argon2/wrkz"
 #       endif
         MAX
     };
@@ -83,7 +89,8 @@ public:
         CN_LITE,
         CN_HEAVY,
         CN_PICO,
-        RANDOM_X
+        RANDOM_X,
+        ARGON2
     };
 
     inline Algorithm()                                     {}
