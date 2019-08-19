@@ -6,7 +6,7 @@
     ]
   ],
   "_from": "git+https://github.com/MoneroOcean/node-cryptonight-hashing.git",
-  "_id": "cryptonight-hashing@13.0.0",
+  "_id": "cryptonight-hashing@13.0.1",
   "_inCache": true,
   "_installable": true,
   "_location": "/cryptonight-hashing",
@@ -72,5 +72,5 @@
   "scripts": {
     "install": "node-gyp rebuild"
   },
-  "version": "13.0.0"
+  "version": "13.0.1"
 }
