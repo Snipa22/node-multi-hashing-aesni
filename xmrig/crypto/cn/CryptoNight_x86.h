@@ -51,6 +51,11 @@ extern "C"
 #include "crypto/cn/c_skein.h"
 }
 
+#if defined(__AES__) && (__AES__ == 1)
+#else
+#define _mm_aeskeygenassist_si128(a, b) a
+#define _mm_aesenc_si128(a, b) a
+#endif
 
 static inline void do_blake_hash(const uint8_t *input, size_t len, uint8_t *output) {
     blake256_hash(output, input, len);
