@@ -29,6 +29,13 @@
 #include "crypto/common/Assembly.h"
 
 
+#if defined(__AES__) && (__AES__ == 1)
+#else
+#define _mm_aeskeygenassist_si128(a, b) a
+#define _mm_aesenc_si128(a, b) a
+#endif
+
+
 namespace xmrig {
 
 class ICpuInfo
