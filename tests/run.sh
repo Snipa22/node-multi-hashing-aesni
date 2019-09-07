@@ -4,6 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd $DIR
 node test.js
+node k12.js
 node test_sync-1.js
 node test_sync-2.js
 node test_sync-r.js
