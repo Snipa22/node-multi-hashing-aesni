@@ -1,7 +1,7 @@
 "use strict";
 let multiHashing = require('../build/Release/cryptonight-hashing');
 
-const ITER = 200;
+const ITER = 2000000;
 
 let start = Date.now();
 for (let i = ITER; i; -- i) {
