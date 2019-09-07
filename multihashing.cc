@@ -15,7 +15,10 @@
 #include "crypto/cn/CnHash.h"
 #include "crypto/randomx/randomx.h"
 #include "crypto/defyx/defyx.h"
+
+extern "C" {
 #include "crypto/defyx/KangarooTwelve.h"
+} 
 
 #if (defined(__AES__) && (__AES__ == 1)) || (defined(__ARM_FEATURE_CRYPTO) && (__ARM_FEATURE_CRYPTO == 1))
   #define SOFT_AES false
