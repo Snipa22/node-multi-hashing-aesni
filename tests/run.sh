@@ -32,6 +32,7 @@ node test_ar2_chukwa.js
 node test_ar2_wrkz.js
 
 node test_perf.js
+node test_perf_k12.js
 node test_perf_light.js
 node test_perf_heavy.js
 node test_perf_gpu.js
