@@ -28,12 +28,6 @@
 
 #include "crypto/cn/CnAlgo.h"
 
-#if !defined(__ARM_64BIT_STATE)
-float32x4_t vdivq_f32(const float32x4_t a, const float32x4_t b) {
-   const float32x4_t inv = vrecpeq_f32(b);
-   return vmulq_f32(a, vmulq_f32(vrecpsq_f32(b, inv), inv));
-}
-#endif
 
 inline void vandq_f32(float32x4_t &v, uint32_t v2)
 {

@@ -18,7 +18,10 @@
  * SUCH DAMAGE.
  */
 
+#ifdef __unix
 #include <sys/mman.h>
+#endif
+
 #include <stdint.h>
 
 #include "yescrypt.h"
@@ -76,7 +79,7 @@ alloc_region(yescrypt_region_t * region, size_t size)
 #else
 	base = aligned = NULL;
 	if (size + 63 < size) {
-		errno = ENOMEM;
+		//errno = ENOMEM;
 	} else if ((base = malloc(size + 63)) != NULL) {
 		aligned = base + 63;
 		aligned -= (uintptr_t)aligned & 63;
@@ -138,7 +141,11 @@ yescrypt_init_shared(yescrypt_shared_t * shared,
 
 	half1 = half2 = *shared;
 	half1.aligned_size /= 2;
+#ifdef __unix
 	half2.aligned += half1.aligned_size;
+#else
+	(uint8_t*)half2.aligned += half1.aligned_size;
+#endif
 	half2.aligned_size = half1.aligned_size;
 	N /= 2;
 
