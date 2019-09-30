@@ -9,7 +9,6 @@ node test_sync-1.js
 node test_sync-2.js
 node test_sync-r.js
 node test_sync-half.js
-node test_sync-wow.js
 node test_sync-msr.js
 node test_sync-xao.js
 node test_sync-rto.js
@@ -24,6 +23,7 @@ node test_sync_heavy.js
 node test_sync_heavy-xhv.js
 node test_sync_heavy-tube.js
 node test_sync_pico.js
+node test_rx0.js
 node test_rx_defyx.js
 node test_rx_wow.js
 node test_rx_loki.js

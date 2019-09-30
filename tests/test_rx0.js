@@ -10,9 +10,9 @@ let lr = lineReader.createInterface({
 lr.on('line', function (line) {
      const line_data0 = line.split(" ");
      const line_data = line_data0.slice(0, 2).concat(line_data0.slice(2).join(" "));
-     let result = multiHashing.randomx(Buffer.from(line_data[2]), Buffer.from(line_data[1], 'hex'), 0).toString('hex');
+     let result = multiHashing.randomx(Buffer.from(line_data[2]), Buffer.from(line_data[1]), 0).toString('hex');
      if (line_data[0] !== result) {
-         console.error(line_data[1] + " " + line_data[2] + ": " + result);
+         console.error(line_data[1] + " '" + line_data[2] + "': " + result);
          testsFailed += 1;
      } else {
          testsPassed += 1;
