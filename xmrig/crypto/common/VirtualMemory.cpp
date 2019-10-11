@@ -27,7 +27,6 @@
 
 #include "crypto/common/VirtualMemory.h"
 #include "backend/cpu/Cpu.h"
-#include "base/io/log/Log.h"
 #include "crypto/common/MemoryPool.h"
 #include "crypto/common/portable/mm_malloc.h"
 
