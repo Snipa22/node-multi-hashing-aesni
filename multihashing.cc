@@ -81,6 +81,9 @@ void init_rx(const uint8_t* seed_hash_data, xmrig::Algorithm::Id algo) {
             case 1:
                 randomx_apply_config(RandomX_ScalaConfig);
                 break;
+            case 2:
+                randomx_apply_config(RandomX_ArqmaConfig);
+                break;
             case 17:
                 randomx_apply_config(RandomX_WowneroConfig);
                 break;
