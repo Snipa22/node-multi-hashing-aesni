@@ -34,7 +34,6 @@ xmrig::Algorithm::Family xmrig::Algorithm::family(Id id)
     case CN_1:
     case CN_2:
     case CN_R:
-    case CN_WOW:
     case CN_FAST:
     case CN_HALF:
     case CN_XAO:
@@ -70,6 +69,7 @@ xmrig::Algorithm::Family xmrig::Algorithm::family(Id id)
     case RX_WOW:
     case RX_LOKI:
     case DEFYX:
+    case RX_ARQ:
         return RANDOM_X;
 #   endif
 
@@ -79,9 +79,8 @@ xmrig::Algorithm::Family xmrig::Algorithm::family(Id id)
         return ARGON2;
 #   endif
 
-    case INVALID:
-    case MAX:
-        return UNKNOWN;
+    default:
+        break;
     }
 
     return UNKNOWN;
