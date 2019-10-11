@@ -46,7 +46,7 @@ public:
     XMRIG_DISABLE_COPY_MOVE_DEFAULT(VirtualMemory)
 
     VirtualMemory(size_t size, bool hugePages, bool usePool, uint32_t node = 0, size_t alignSize = 64);
-    ~VirtualMemory();
+    //~VirtualMemory();
 
     inline bool isHugePages() const     { return m_flags.test(FLAG_HUGEPAGES); }
     inline size_t size() const          { return m_size; }
