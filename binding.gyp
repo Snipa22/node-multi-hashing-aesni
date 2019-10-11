@@ -18,6 +18,8 @@
                 "xmrig-override/crypto/common/Algorithm.cpp",
                 "xmrig/crypto/cn/CnCtx.cpp",
                 "xmrig/crypto/cn/CnHash.cpp",
+                "xmrig/crypto/common/MemoryPool.cpp",
+                "xmrig/crypto/common/VirtualMemory.cpp",
                 "xmrig/crypto/common/VirtualMemory_unix.cpp",
 
                 "xmrig/crypto/randomx/aes_hash.cpp",

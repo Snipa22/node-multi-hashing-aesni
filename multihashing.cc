@@ -47,7 +47,7 @@ extern "C" {
 #endif
 
 const size_t max_mem_size = 4 * 1024 * 1024;
-xmrig::VirtualMemory mem(max_mem_size, true, 4096);
+xmrig::VirtualMemory mem(max_mem_size, true, false, 0, 4096);
 static struct cryptonight_ctx* ctx = nullptr;
 static randomx_cache* rx_cache[xmrig::Algorithm::Id::MAX] = {nullptr};
 static randomx_vm* rx_vm[xmrig::Algorithm::Id::MAX] = {nullptr};
