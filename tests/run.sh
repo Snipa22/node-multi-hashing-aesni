@@ -24,6 +24,7 @@ node test_sync_heavy-xhv.js
 node test_sync_heavy-tube.js
 node test_sync_pico.js
 node test_rx0.js
+node test_rx_arq.js
 node test_rx_defyx.js
 node test_rx_wow.js
 node test_rx_loki.js
