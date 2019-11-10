@@ -3,6 +3,7 @@
 #include <v8.h>
 #include <stdint.h>
 #include <nan.h>
+#include <stdexcept>
 
 //#if (defined(__AES__) && (__AES__ == 1)) || defined(__APPLE__) || defined(__ARM_ARCH)
 //#else
